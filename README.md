@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <h1 align="center">Employee Management System</h1>
 
 <p align="center">
@@ -167,3 +168,7 @@ I am extending it with additional features and improvements.
 - Leave Management
 - Admin Analytics
 - UI Enhancements
+=======
+# employee-management-system
+Full-stack MERN employee management system with authentication and admin dashboard.
+>>>>>>> 9b1bc253d3a0f84ad51c5e481094bbc945bb0edc
