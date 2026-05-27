@@ -25,7 +25,7 @@ const verifyUser = async (req, res, next) => {
     const token = authHeader.split(" ")[1];
 
     // 4️⃣ Verify token
-    const decoded = jwt.verify(token, process.env.JWT_KEY);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // 5️⃣ Find user
     const user = await User.findById(decoded._id).select("-password");
