@@ -395,25 +395,30 @@ export const getAdminLeaves = async (req, res) => {
       query.status = status.toLowerCase();
     }
 
-    const skip = (parseInt(page) - 1) * parseInt(limit);
-
-    let leaves = await Leave.find(query)
-      .populate("user", "name email employeeId department position designation profileImage")
+    const leaves = await Leave.find(query)
+      .populate({
+        path: "user",
+        select: "name email employeeId department position designation profileImage isActive",
+        match: { isActive: true },
+      })
       .sort({ createdAt: -1 });
 
-    if (search) {
-      leaves = leaves.filter((l) => {
-        if (!l.user) return false;
-        const nameMatch = l.user.name?.toLowerCase().includes(search.toLowerCase());
-        const emailMatch = l.user.email?.toLowerCase().includes(search.toLowerCase());
-        const empIdMatch = l.user.employeeId?.toLowerCase().includes(search.toLowerCase());
-        return nameMatch || emailMatch || empIdMatch;
-      });
-    }
+    const filteredLeaves = leaves.filter((l) => {
+      if (!l.user) return false;
+      if (search) {
+        const term = search.toLowerCase();
+        return (
+          l.user.name?.toLowerCase().includes(term) ||
+          l.user.email?.toLowerCase().includes(term) ||
+          l.user.employeeId?.toLowerCase().includes(term)
+        );
+      }
+      return true;
+    });
 
-    const totalRecords = leaves.length;
+    const totalRecords = filteredLeaves.length;
     const totalPages = Math.ceil(totalRecords / parseInt(limit)) || 1;
-    const paginatedLeaves = leaves.slice(skip, skip + parseInt(limit));
+    const paginatedLeaves = filteredLeaves.slice((parseInt(page) - 1) * parseInt(limit), parseInt(page) * parseInt(limit));
 
     res.status(200).json({
       success: true,

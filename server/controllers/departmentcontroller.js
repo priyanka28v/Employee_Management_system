@@ -1,11 +1,11 @@
 import Department from "../models/Department.js";
 import User from "../models/User.js";
 
-// Get all departments (with optional filters)
 const getDepartments = async (req, res) => {
   try {
-    const { search, status } = req.query;
+    const { search, status, page = 1, limit = 10 } = req.query;
     const filter = {};
+
     if (search) {
       const regex = new RegExp(search, "i");
       filter.$or = [{ dep_name: regex }, { departmentCode: regex }];
@@ -13,8 +13,22 @@ const getDepartments = async (req, res) => {
     if (status) {
       filter.status = status.toLowerCase();
     }
-    const departments = await Department.find(filter);
-    return res.status(200).json({ success: true, departments });
+
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const totalRecords = await Department.countDocuments(filter);
+    const totalPages = Math.ceil(totalRecords / parseInt(limit)) || 1;
+
+    const departments = await Department.find(filter)
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    return res.status(200).json({
+      success: true,
+      departments,
+      currentPage: parseInt(page),
+      totalPages,
+      totalRecords,
+    });
   } catch (error) {
     return res.status(500).json({ success: false, error: "get department server error" });
   }

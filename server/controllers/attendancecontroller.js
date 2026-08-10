@@ -21,30 +21,43 @@ export const getAdminAttendance = async (req, res) => {
     // If search term is provided, filter employee IDs first
     if (search) {
       const matchingUsers = await User.find({
-        $or: [
-          { name: { $regex: search, $options: "i" } },
-          { email: { $regex: search, $options: "i" } },
-          { employeeId: { $regex: search, $options: "i" } },
-        ],
-      }).select("_id");
+          status: "active",
+          $or: [
+            { name: { $regex: search, $options: "i" } },
+            { email: { $regex: search, $options: "i" } },
+            { employeeId: { $regex: search, $options: "i" } },
+          ],
+        }).select("_id");
       const userIds = matchingUsers.map((u) => u._id);
       query.employeeId = { $in: userIds };
     }
 
-    const skip = (parseInt(page) - 1) * parseInt(limit);
-    const totalRecords = await Attendance.countDocuments(query);
-    const totalPages = Math.ceil(totalRecords / parseInt(limit)) || 1;
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 10;
 
-    const records = await Attendance.find(query)
-      .populate("employeeId", "name email employeeId department position designation profileImage")
-      .sort({ date: -1, createdAt: -1 })
-      .skip(skip)
-      .limit(parseInt(limit));
+    // Fetch all matching attendance records (will be filtered later)
+    const allRecords = await Attendance.find(query)
+      .populate({
+        path: "employeeId",
+        select: "name email employeeId department position designation profileImage",
+        match: { status: "active" },
+      })
+      .sort({ date: -1, createdAt: -1 });
+
+    // Remove records with inactive/deleted users
+    const filteredRecords = allRecords.filter((rec) => rec.employeeId);
+
+    const totalRecords = filteredRecords.length;
+    const totalPages = Math.ceil(totalRecords / limitNum) || 1;
+
+    // Apply pagination on the filtered array
+    const startIdx = (pageNum - 1) * limitNum;
+    const paginatedRecords = filteredRecords.slice(startIdx, startIdx + limitNum);
 
     res.status(200).json({
       success: true,
-      attendance: records,
-      currentPage: parseInt(page),
+      attendance: paginatedRecords,
+      currentPage: pageNum,
       totalPages,
       totalRecords,
     });
