@@ -196,12 +196,14 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // CREATE USER
+    // Resolve department name to ObjectId
+    const deptDoc = await Department.findOne({ dep_name: department.trim() });
     const user = new User({
       name: name.trim(),
       email: normalizedEmail,
       phone: cleanPhone,
       dob,
-      department: department.trim(),
+      department: deptDoc ? deptDoc._id : null,
       position: position.trim(),
       password: hashedPassword,
       role: role || "employee",

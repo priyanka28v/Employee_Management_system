@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Swal from 'sweetalert2';
 
 const AddDepartment = () => {
+  // Local loading state removed; global loader will handle request spinner
   const [department, setdepartment] = useState({
     dep_name: "",
     description: "",
@@ -29,9 +31,8 @@ const AddDepartment = () => {
 
   const handlesubmit = async (e) => {
     e.preventDefault();
-
     if (!department.dep_name) {
-      alert("Department name is required");
+      Swal.fire({ icon: 'error', text: 'Department name is required' });
       return;
     }
     try {
@@ -39,19 +40,17 @@ const AddDepartment = () => {
         "http://localhost:5000/api/department/add",
         department,
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          showSuccessMessage: 'Department added',
         },
       );
-
       if (response.data.success) {
         navigate("/admin-dashboard/departments");
+      } else {
+        Swal.fire({ icon: 'error', text: response.data.error || 'Failed to add department' });
       }
     } catch (error) {
-      if (error.response && !error.response.data.success) {
-        alert(error.response.data.error);
-      }
+      Swal.fire({ icon: 'error', text: error.response?.data?.error || 'Server error while adding department' });
     }
   };
 
@@ -123,12 +122,11 @@ const AddDepartment = () => {
           </button>
 
           <button
-            type="submit"
-            className="px-6 py-2.5 rounded-lg bg-teal-600 text-white
-                     text-sm font-medium hover:bg-teal-700 transition"
-          >
-            Add Department
-          </button>
+  type="submit"
+  className="px-6 py-2.5 rounded-lg bg-teal-600 text-white text-sm font-medium hover:bg-teal-700 transition"
+>
+  Add Department
+</button>
         </div>
       </form>
     </div>

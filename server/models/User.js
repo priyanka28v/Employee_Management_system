@@ -76,11 +76,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
 
-    department: {
-      type: String,
-      trim: true,
-      default: "",
-    },
+    department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department', default: null },
 
     position: {
       type: String,

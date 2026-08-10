@@ -1,95 +1,154 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash, FaTimes, FaCheck } from "react-icons/fa";
+import Swal from 'sweetalert2';
 import axios from "axios";
 
 const DepartmentList = () => {
   const [departments, setDepartment] = useState([]);
   const [depLoading, setDepLoading] = useState(false);
   const [editDept, setEditDept] = useState(null);
-  const [editForm, setEditForm] = useState({ dep_name: "", description: "" });
+  const [editForm, setEditForm] = useState({ dep_name: "", description: "", status: "active", employeeCount: 0 });
   const [editLoading, setEditLoading] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('');
 
-  const fetchDepartments = async () => {
+  const fetchDepartments = useCallback(async () => {
     setDepLoading(true);
     try {
-      const response = await axios.get(
-        "http://127.0.0.1:5000/api/department",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const url = statusFilter ? `http://127.0.0.1:5000/api/department?status=${statusFilter}` : 'http://127.0.0.1:5000/api/department';
+      console.log('Fetching departments with URL:', url);
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log('Received departments:', response.data.departments?.map(d => ({id:d._id, status:d.status})));
 
       if (response.data.success) {
         setDepartment(response.data.departments || []);
       }
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.error) {
+      if (error.response && error.response.data.error) {
         alert(error.response.data.error);
+      } else {
+        alert("Failed to load departments");
       }
     } finally {
       setDepLoading(false);
     }
-  };
+  }, [statusFilter]);
 
   useEffect(() => {
     fetchDepartments();
-  }, []);
+  }, [fetchDepartments]);
 
   const handleEditClick = (dept) => {
     setEditDept(dept);
-    setEditForm({ dep_name: dept.dep_name || "", description: dept.description || "" });
+    setEditForm({ dep_name: dept.dep_name || "", description: dept.description || "", status: dept.status || "active", employeeCount: dept.employeeCount || 0 });
   };
 
   const handleSaveEdit = async (e) => {
     e.preventDefault();
     if (!editForm.dep_name.trim()) return alert("Department name is required");
 
-    setEditLoading(true);
     try {
       const response = await axios.put(
-        `http://127.0.0.1:5000/api/department/${editDept._id}`,
+        `http://127.0.0.1:5000/api/department/update/${editDept._id}`,
         editForm,
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          showSuccessMessage: 'Department updated',
         }
       );
-
       if (response.data?.success) {
         setEditDept(null);
         fetchDepartments();
       }
     } catch (error) {
       alert(error.response?.data?.error || "Failed to update department");
-    } finally {
-      setEditLoading(false);
     }
   };
 
   // ✅ DELETE FUNCTION
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this department?");
-    if (!confirmDelete) return;
+    const result = await Swal.fire({
+      title: 'Delete Department?',
+      text: 'This action cannot be undone.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Delete',
+    });
+    if (!result.isConfirmed) return;
 
     try {
       const response = await axios.delete(
         `http://127.0.0.1:5000/api/department/${id}`,
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          showSuccessMessage: 'Department deleted',
         }
       );
-
-      if (response.data.success) {
-        setDepartment(departments.filter((dep) => dep._id !== id));
+      if (response.data?.success) {
+        fetchDepartments();
       }
     } catch (error) {
-      alert(error.response?.data?.error || "Failed to delete department");
+      Swal.fire({ icon: 'error', text: error.response?.data?.error || 'Server error while deleting' });
+    }
+  };
+
+  const handleDeactivate = async (id) => {
+    const result = await Swal.fire({
+      title: 'Deactivate Department?',
+      text: 'Are you sure you want to deactivate this department?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      confirmButtonText: 'Yes, deactivate',
+    });
+    if (!result.isConfirmed) return;
+    try {
+      const response = await axios.patch(
+        `http://127.0.0.1:5000/api/department/deactivate/${id}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          showSuccessMessage: 'Department deactivated',
+        }
+      );
+      if (response.data?.success) {
+        fetchDepartments();
+      }
+    } catch (error) {
+      alert(error.response?.data?.error || "Failed to deactivate department");
+    }
+  };
+
+  const handleActivate = async (id) => {
+    const result = await Swal.fire({
+      title: 'Activate Department?',
+      text: 'Are you sure you want to activate this department?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#28a745',
+      confirmButtonText: 'Yes, activate',
+    });
+    if (!result.isConfirmed) return;
+    try {
+      const response = await axios.patch(
+        `http://127.0.0.1:5000/api/department/reactivate/${id}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          showSuccessMessage: 'Department activated',
+        }
+      );
+      if (response.data?.success) {
+        fetchDepartments();
+      }
+    } catch (error) {
+      alert(error.response?.data?.error || "Failed to activate department");
     }
   };
 
@@ -104,12 +163,23 @@ const DepartmentList = () => {
               Manage Departments
             </h3>
 
-            <Link
-              to="/admin-dashboard/add-department"
-              className="px-4 py-2 bg-teal-600 text-white rounded-lg text-sm font-medium hover:bg-teal-700 transition"
-            >
-              + Add Department
-            </Link>
+            <div className="flex items-center gap-4">
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="p-2 border rounded"
+              >
+                <option value="">All</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+              <Link
+                to="/admin-dashboard/add-department"
+                className="px-4 py-2 bg-teal-600 text-white rounded-lg text-sm font-medium hover:bg-teal-700 transition"
+              >
+                + Add Department
+              </Link>
+            </div>
           </div>
 
           <div className="overflow-x-auto">
@@ -119,6 +189,7 @@ const DepartmentList = () => {
                   <th className="p-3">#</th>
                   <th className="p-3">Department Name</th>
                   <th className="p-3">Description</th>
+                  <th className="p-3">Status</th>
                   <th className="p-3">Employees</th>
                   <th className="p-3">Actions</th>
                 </tr>
@@ -133,6 +204,7 @@ const DepartmentList = () => {
                     <td className="p-3">{index + 1}</td>
                     <td className="p-3 font-semibold text-gray-800">{dept.dep_name}</td>
                     <td className="p-3 text-gray-500 max-w-xs truncate">{dept.description || "-"}</td>
+                    <td className="p-3 capitalize cursor-pointer text-blue-600 hover:underline" onClick={() => dept.status === 'active' ? handleDeactivate(dept._id) : handleActivate(dept._id)}>{dept.status === 'active' ? 'Active' : 'Inactive'}</td>
                     <td className="p-3 font-bold text-gray-700">{dept.employeeCount || 0}</td>
                     <td className="p-3 flex gap-3">
                       <button
@@ -142,10 +214,26 @@ const DepartmentList = () => {
                       >
                         <FaEdit />
                       </button>
-
+                      {dept.status === "active" ? (
+                        <button
+                          onClick={() => handleDeactivate(dept._id)}
+                          className="px-2 py-1 bg-orange-500 text-white rounded hover:bg-orange-600 transition ml-2 flex items-center"
+                          title="Deactivate Department"
+                        >
+                          <FaTimes className="mr-1" /> Deactivate
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleActivate(dept._id)}
+                          className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition ml-2 flex items-center"
+                          title="Activate Department"
+                        >
+                          <FaCheck className="mr-1" /> Activate
+                        </button>
+                      )}
                       <button
                         onClick={() => handleDelete(dept._id)}
-                        className="text-red-600 hover:text-red-800 transition"
+                        className="text-red-600 hover:text-red-800 transition ml-2"
                         title="Delete Department"
                       >
                         <FaTrash />
@@ -189,6 +277,29 @@ const DepartmentList = () => {
                   value={editForm.description}
                   onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
                   className="w-full p-2.5 border rounded-lg outline-none bg-gray-50 resize-none"
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold mb-1">Status</label>
+                <select
+                  value={editForm.status}
+                  onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
+                  className="w-full p-2.5 border rounded-lg outline-none bg-gray-50"
+                >
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block font-semibold mb-1">Employees</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={editForm.employeeCount}
+                  onChange={(e) => setEditForm({ ...editForm, employeeCount: Number(e.target.value) })}
+                  className="w-full p-2.5 border rounded-lg bg-gray-50"
                 />
               </div>
 
