@@ -110,3 +110,33 @@ export const upsertSalary = async (req, res) => {
     return res.status(500).json({ success: false, error: error.message || 'Failed to upsert salary' });
   }
 };
+
+// Get leave allocation for an employee (admin only)
+export const getLeaveAllocation = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const balance = await LeaveBalance.findOne({ user: id });
+    if (!balance) {
+      return res.status(404).json({ success: false, error: 'Leave allocation not found' });
+    }
+    return res.status(200).json({ success: true, leaveBalance: balance });
+  } catch (error) {
+    console.error('Error in getLeaveAllocation:', error);
+    return res.status(500).json({ success: false, error: error.message || 'Failed to get leave allocation' });
+  }
+};
+
+// Get salary record for an employee (admin only)
+export const getSalary = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const salary = await Salary.findOne({ employeeId: id });
+    if (!salary) {
+      return res.status(404).json({ success: false, error: 'Salary record not found' });
+    }
+    return res.status(200).json({ success: true, salary });
+  } catch (error) {
+    console.error('Error in getSalary:', error);
+    return res.status(500).json({ success: false, error: error.message || 'Failed to get salary' });
+  }
+};

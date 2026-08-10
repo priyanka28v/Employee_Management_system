@@ -7,7 +7,7 @@ import {
   updateEmployee,
   toggleEmployeeStatus,
 } from "../controllers/employeeController.js";
-import { updateLeaveAllocation, upsertSalary } from "../controllers/employeeLeaveSalaryController.js";
+import { updateLeaveAllocation, upsertSalary, getLeaveAllocation, getSalary } from "../controllers/employeeLeaveSalaryController.js";
 
 const router = express.Router();
 
@@ -27,4 +27,8 @@ router.put("/:id", verifyUser, verifyAdmin, updateEmployee);
 router.patch("/:id/status", verifyUser, verifyAdmin, toggleEmployeeStatus);
 router.patch("/:id/leave-allocation", verifyUser, verifyAdmin, updateLeaveAllocation);
 router.patch("/:id/salary", verifyUser, verifyAdmin, upsertSalary);
+// Get leave allocation for an employee (admin only)
+router.get('/:id/leave-allocation', verifyUser, verifyAdmin, getLeaveAllocation);
+// Get salary record for an employee (admin only)
+router.get('/:id/salary', verifyUser, verifyAdmin, getSalary);
 export default router;

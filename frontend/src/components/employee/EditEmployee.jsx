@@ -101,6 +101,7 @@ const EditEmployee = () => {
 
     fetchEmployee();
     fetchDepartments();
+    fetchLeaveSalaryStatus();
   }, [id, token]);
 
   const handleChange = (e) =>
@@ -111,7 +112,19 @@ const EditEmployee = () => {
 
   const handleSalaryChange = (e) =>
     setSalaryForm({ ...salaryForm, [e.target.name]: e.target.value });
-
+const fetchLeaveSalaryStatus = async () => {
+  try {
+    const [leaveRes, salaryRes] = await Promise.all([
+      axios.get(`http://127.0.0.1:5000/api/employees/${id}/leave-allocation`, { headers: { Authorization: `Bearer ${token}` } }).catch(() => null),
+      axios.get(`http://127.0.0.1:5000/api/employees/${id}/salary`, { headers: { Authorization: `Bearer ${token}` } }).catch(() => null),
+    ]);
+    if (leaveRes?.data?.success && salaryRes?.data?.success) {
+      setLeaveSalaryAdded(true);
+    }
+  } catch (err) {
+    console.error('Error checking leave/salary status', err);
+  }
+};
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
