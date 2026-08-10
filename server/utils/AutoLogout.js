@@ -2,43 +2,24 @@ import Attendance from "../models/Attendance.js";
 
 export const autoLogoutEmployees = async () => {
   try {
+    const today = new Date().toISOString().split("T")[0];
 
-    // TODAY DATE
-    const today = new Date()
-      .toISOString()
-      .split("T")[0];
-
-    // FIND USERS WITHOUT LOGOUT
     const attendance = await Attendance.find({
       date: today,
-
-      $or: [
-        { logoutTime: null },
-        { logoutTime: "" },
-      ],
+      $or: [{ logoutTime: null }, { logoutTime: "" }],
     });
 
-    // CURRENT TIME
     const now = new Date();
+    const logoutTime = `${now.getHours()}:${now.getMinutes()}`;
 
-    const logoutTime =
-      `${now.getHours()}:${now.getMinutes()}`;
-
-    // UPDATE
     for (const item of attendance) {
-
       item.logoutTime = logoutTime;
-
       item.isAutoLogout = true;
-
       await item.save();
     }
 
     console.log("✅ Auto logout completed");
-
   } catch (error) {
-
-    console.log(error);
-
+    console.error("Auto logout error:", error.message);
   }
 };

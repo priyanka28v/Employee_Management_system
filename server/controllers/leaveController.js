@@ -1,5 +1,4 @@
-import Leave from "../models/Leave.js";
-import LeaveBalance from "../models/Leave.js";
+import { Leave, LeaveBalance } from "../models/Leave.js";
 
 // ✅ APPLY LEAVE
 export const applyLeave = async (req, res) => {
@@ -359,25 +358,75 @@ export const rejectLeave = async (req, res) => {
 };    
 
 // ✅ GET LEAVE BALANCE
+export const getLeaveBalance = async (req, res) => {
+  try {
+    let balance = await LeaveBalance.findOne({
+      user: req.user._id,
+    });
 
-export const getLeaveBalance =
-  async (req, res) => {
-    try {
-
-      const balance =
-        await LeaveBalance.findOne({
-          user: req.user._id,
-        });
-
-      res.json({
-        success: true,
-        balance,
-      });
-
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: error.message,
+    if (!balance) {
+      balance = await LeaveBalance.create({
+        user: req.user._id,
+        casualLeave: { total: 12, used: 0 },
+        sickLeave: { total: 10, used: 0 },
+        earnedLeave: { total: 15, used: 0 },
       });
     }
-  };
+
+    res.json({
+      success: true,
+      balance,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ✅ GET ALL LEAVES FOR ADMIN (Paginated & Searchable)
+export const getAdminLeaves = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, search = "", status = "" } = req.query;
+
+    const query = {};
+    if (status) {
+      query.status = status.toLowerCase();
+    }
+
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
+    let leaves = await Leave.find(query)
+      .populate("user", "name email employeeId department position designation profileImage")
+      .sort({ createdAt: -1 });
+
+    if (search) {
+      leaves = leaves.filter((l) => {
+        if (!l.user) return false;
+        const nameMatch = l.user.name?.toLowerCase().includes(search.toLowerCase());
+        const emailMatch = l.user.email?.toLowerCase().includes(search.toLowerCase());
+        const empIdMatch = l.user.employeeId?.toLowerCase().includes(search.toLowerCase());
+        return nameMatch || emailMatch || empIdMatch;
+      });
+    }
+
+    const totalRecords = leaves.length;
+    const totalPages = Math.ceil(totalRecords / parseInt(limit)) || 1;
+    const paginatedLeaves = leaves.slice(skip, skip + parseInt(limit));
+
+    res.status(200).json({
+      success: true,
+      leaves: paginatedLeaves,
+      currentPage: parseInt(page),
+      totalPages,
+      totalRecords,
+    });
+  } catch (error) {
+    console.error("Error in getAdminLeaves:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch admin leaves",
+    });
+  }
+};

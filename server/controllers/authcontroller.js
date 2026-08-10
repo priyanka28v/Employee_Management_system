@@ -2,7 +2,8 @@ import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Attendance from "../models/Attendance.js";
-import LeaveBalance from "../models/Leave.js";
+import { LeaveBalance } from "../models/Leave.js";
+import Department from "../models/Department.js";
 
 /* =========================
    AUTO ATTENDANCE FUNCTION
@@ -55,8 +56,17 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        error: "Please provide email and password",
+      });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+
     // CHECK USER
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: normalizedEmail });
 
     if (!user) {
       return res.status(404).json({
@@ -74,7 +84,8 @@ const login = async (req, res) => {
         error: "Wrong password",
       });
     }
-console.log("LOGIN API HIT");
+
+    console.log("LOGIN API HIT");
     // MARK ATTENDANCE
     await markAttendance(user._id);
 
@@ -131,13 +142,53 @@ const registerUser = async (req, res) => {
       role,
     } = req.body;
 
+    // VALIDATIONS
+    if (!name || !name.trim()) {
+      return res.status(400).json({ success: false, error: "Full name is required" });
+    }
+
+    if (!email || !email.trim()) {
+      return res.status(400).json({ success: false, error: "Email address is required" });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(normalizedEmail)) {
+      return res.status(400).json({ success: false, error: "Invalid email address format" });
+    }
+
+    if (!phone) {
+      return res.status(400).json({ success: false, error: "Phone number is required" });
+    }
+
+    const cleanPhone = String(phone).replace(/\s+/g, "");
+    if (!/^\d{10}$/.test(cleanPhone)) {
+      return res.status(400).json({ success: false, error: "Phone number must be exactly 10 digits" });
+    }
+
+    if (!dob) {
+      return res.status(400).json({ success: false, error: "Date of birth is required" });
+    }
+
+    if (!department) {
+      return res.status(400).json({ success: false, error: "Department is required" });
+    }
+
+    if (!position || !position.trim()) {
+      return res.status(400).json({ success: false, error: "Job position is required" });
+    }
+
+    if (!password || password.length < 6) {
+      return res.status(400).json({ success: false, error: "Password must be at least 6 characters long" });
+    }
+
     // CHECK EXISTING USER
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: normalizedEmail });
 
     if (existingUser) {
       return res.status(400).json({
         success: false,
-        error: "User already exists",
+        error: "User with this email already exists",
       });
     }
 
@@ -146,29 +197,38 @@ const registerUser = async (req, res) => {
 
     // CREATE USER
     const user = new User({
-      name,
-      email,
-      phone,
+      name: name.trim(),
+      email: normalizedEmail,
+      phone: cleanPhone,
       dob,
-      department,
-      position,
+      department: department.trim(),
+      position: position.trim(),
       password: hashedPassword,
       role: role || "employee",
     });
 
     await user.save();
+
+    // UPDATE DEPARTMENT EMPLOYEE COUNT IF DEPARTMENT EXISTS
+    try {
+      await Department.findOneAndUpdate(
+        { dep_name: department.trim() },
+        { $inc: { employeeCount: 1 } }
+      );
+    } catch (depErr) {
+      console.log("Department count update notice:", depErr.message);
+    }
     
-// CREATE DEFAULT LEAVE BALANCE
+    // CREATE DEFAULT LEAVE BALANCE
+    await LeaveBalance.create({
+      user: user._id,
+      casualLeave: { total: 12, used: 0 },
+      sickLeave: { total: 10, used: 0 },
+      earnedLeave: { total: 15, used: 0 },
+      privilegeLeave: { total: 15, used: 0 },
+      compOff: { total: 5, used: 0 },
+    });
 
-await LeaveBalance.create({
-  employeeId: user._id,
-
-  casualLeave: 12,
-
-  sickLeave: 10,
-
-  earnedLeave: 15,
-});
     return res.status(201).json({
       success: true,
       message: "User created successfully",
@@ -187,9 +247,16 @@ await LeaveBalance.create({
   } catch (error) {
     console.log("🔥 ERROR:", error.message);
 
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        error: "User with this email already exists",
+      });
+    }
+
     return res.status(500).json({
       success: false,
-      error: "Server error",
+      error: error.message || "Server error during registration",
     });
   }
 };

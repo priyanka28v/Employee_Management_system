@@ -37,6 +37,13 @@ const verifyUser = async (req, res, next) => {
       });
     }
 
+    if (user.status === "inactive") {
+      return res.status(403).json({
+        success: false,
+        error: "Account deactivated. Please contact admin.",
+      });
+    }
+
     // 6️⃣ Attach user & continue
     req.user = user;
     next();
@@ -47,6 +54,28 @@ const verifyUser = async (req, res, next) => {
     return res.status(401).json({
       success: false,
       error: "Invalid or expired token",
+    });
+  }
+};
+
+export const verifyAdmin = (req, res, next) => {
+  if (req.user && req.user.role === "admin") {
+    next();
+  } else {
+    return res.status(403).json({
+      success: false,
+      error: "Access denied. Admin role required.",
+    });
+  }
+};
+
+export const verifyEmployee = (req, res, next) => {
+  if (req.user && (req.user.role === "employee" || req.user.role === "admin")) {
+    next();
+  } else {
+    return res.status(403).json({
+      success: false,
+      error: "Access denied.",
     });
   }
 };

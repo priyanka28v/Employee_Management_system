@@ -60,7 +60,7 @@ const EmployeeLeaves = () => {
 
   // ✅ EDIT
   const handleEdit = (id) => {
-    navigate(`/edit-leave/${id}`);
+    navigate(`/employee-dashboard/edit-leave/${id}`);
   };
 
   return (

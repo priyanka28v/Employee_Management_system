@@ -19,12 +19,17 @@ import EmployeeHome from "./pages/aboutEmployee/EmployeeHome";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import RoleBaseRoutes from "./utils/RoleBaseRoutes";
 
-/* ================= ADMIN COMPONENTS ================= */
+/* ================= ADMIN COMPONENTS & PAGES ================= */
 
 import AdminSummary from "./components/Dashboard/AdminSummary";
-
 import DepartmentList from "./components/departments/DepartmentList";
 import AddDepartment from "./components/departments/AddDepartment";
+import EmployeeList from "./components/employee/EmployeeList";
+import AddEmployee from "./components/employee/AddEmployee";
+import EmployeeDetail from "./components/employee/EmployeeDetail";
+import AdminLeaves from "./pages/leaves/AdminLeaves";
+import AdminSalary from "./pages/salary/AdminSalary";
+import AdminAttendance from "./pages/attendance/AdminAttendance";
 
 /* ================= EMPLOYEE PAGES ================= */
 
@@ -69,16 +74,28 @@ function App() {
           {/* ADMIN HOME */}
           <Route index element={<AdminSummary />} />
 
+          {/* EMPLOYEES */}
+          <Route path="employees" element={<EmployeeList />} />
+          <Route path="add-employee" element={<AddEmployee />} />
+          <Route path="employees/:id" element={<EmployeeDetail />} />
+          <Route path="employees/edit/:id" element={<AddEmployee />} />
+
           {/* DEPARTMENTS */}
           <Route path="departments" element={<DepartmentList />} />
-
           <Route path="add-department" element={<AddDepartment />} />
 
           {/* ATTENDANCE */}
+          <Route path="attendance" element={<AdminAttendance />} />
           <Route
             path="attendance-dashboard"
             element={<AttendanceDashboard />}
           />
+
+          {/* LEAVE REQUESTS */}
+          <Route path="leaves" element={<AdminLeaves />} />
+
+          {/* SALARY */}
+          <Route path="salary" element={<AdminSalary />} />
 
           {/* PROFILE */}
           <Route path="profile" element={<Profile />} />

@@ -15,13 +15,7 @@ const AddDepartment = () => {
   // };
   const handlechange = (e) => {
     const { name, value } = e.target;
-
-    if (name === "dep_name") {
-      const formatted =
-        value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
-
-      setdepartment({ ...department, dep_name: formatted });
-    } else if (name === "employeeCount") {
+    if (name === "employeeCount") {
       setdepartment({ ...department, employeeCount: Number(value) });
     } else {
       setdepartment({ ...department, [name]: value });

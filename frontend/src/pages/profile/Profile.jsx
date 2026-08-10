@@ -2,15 +2,20 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   FaUserCircle,
-  FaLinkedin,
-  FaGithub,
   FaEnvelope,
-  FaShareAlt,
+  FaPhone,
+  FaBuilding,
+  FaBriefcase,
+  FaCalendarAlt,
+  FaMapMarkerAlt,
+  FaIdBadge,
+  FaSpinner,
+  FaCheckCircle,
 } from "react-icons/fa";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
-
+  const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -19,266 +24,140 @@ const Profile = () => {
 
   const fetchProfile = async () => {
     try {
+      setLoading(true);
       const res = await axios.get("http://127.0.0.1:5000/api/auth/verify", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
-
-      setUser(res.data.user);
+      if (res.data?.success) {
+        setUser(res.data.user);
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching profile:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] text-gray-500">
+        <FaSpinner className="animate-spin text-3xl text-red-500 mb-2" />
+        <p className="text-sm">Loading user profile...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#f5f5f5]">
+    <div className="min-h-screen bg-gray-100 p-6 md:p-8">
+      <div className="max-w-5xl mx-auto space-y-6">
+        {/* HEADER PROFILE CARD */}
+        <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-200 flex flex-col md:flex-row items-center md:items-start gap-6">
+          <img
+            src={user?.profileImage || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
+            alt={user?.name || "Profile"}
+            className="w-28 h-28 rounded-3xl object-cover border-4 border-red-500 shadow-md shrink-0"
+          />
 
-      <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        {/* LEFT SECTION */}
-        <div className="space-y-6">
-
-          {/* PROFILE CARD */}
-          <div className="bg-white rounded-3xl shadow-sm p-6">
-            <div className="flex items-start gap-4">
-
-              <FaUserCircle className="text-7xl text-gray-300" />
-
-              <div>
-                <h2 className="text-3xl font-bold text-red-400 leading-tight">
-                  {user?.name || "Priyanka Sharma"}
-                </h2>
-
-                <p className="text-gray-600 font-medium mt-2">
-                  Software Developer
-                </p>
-
-                <p className="text-gray-500 mt-1">
-                  Yamunanagar, Haryana
-                </p>
-              </div>
-
+          <div className="flex-1 space-y-2 text-center md:text-left">
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+              <h1 className="text-3xl font-extrabold text-gray-800">{user?.name || "User Profile"}</h1>
+              <span
+                className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+                  user?.role === "admin"
+                    ? "bg-purple-100 text-purple-700"
+                    : "bg-blue-100 text-blue-700"
+                }`}
+              >
+                {user?.role || "employee"}
+              </span>
             </div>
+
+            <p className="text-gray-600 font-medium flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm">
+              <span className="flex items-center gap-1.5">
+                <FaBriefcase className="text-red-500" /> {user?.position || user?.designation || "Team Member"}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <FaBuilding className="text-blue-500" /> {user?.department || "General"}
+              </span>
+            </p>
+
+            <p className="text-xs text-gray-500 font-mono pt-1">
+              Employee ID: <span className="font-bold text-gray-700">{user?.employeeId || "EMP-001"}</span>
+            </p>
           </div>
-
-          {/* SOCIAL CARD */}
-          <div className="bg-white rounded-3xl shadow-sm p-6">
-
-            <div className="flex items-center gap-3 mb-6">
-
-              <FaShareAlt className="text-red-400 text-xl" />
-
-              <h2 className="text-3xl font-bold text-red-400">
-                Social Profiles
-              </h2>
-
-            </div>
-
-            <div className="space-y-5">
-
-              {/* EMAIL */}
-              <div className="flex items-start gap-4 border-b pb-4">
-
-                <FaEnvelope className="text-gray-700 mt-1" />
-
-                <div>
-                  <p className="font-bold text-gray-800">
-                    Email
-                  </p>
-
-                  <p className="text-gray-500">
-                    {user?.email || "priyanka@example.com"}
-                  </p>
-                </div>
-
-              </div>
-
-              {/* LINKEDIN */}
-              <div className="flex items-start gap-4 border-b pb-4">
-
-                <FaLinkedin className="text-gray-700 mt-1" />
-
-                <div>
-                  <p className="font-bold text-gray-800">
-                    LinkedIn
-                  </p>
-
-                  <p className="text-gray-500 break-all">
-                    https://linkedin.com/in/priyanka
-                  </p>
-                </div>
-
-              </div>
-
-              {/* GITHUB */}
-              <div className="flex items-start gap-4 border-b pb-4">
-
-                <FaGithub className="text-gray-700 mt-1" />
-
-                <div>
-                  <p className="font-bold text-gray-800">
-                    Github ID
-                  </p>
-
-                  <p className="text-gray-500 break-all">
-                    https://github.com/priyanka28v
-                  </p>
-                </div>
-
-              </div>
-
-              {/* JOIN DATE */}
-              <div className="flex items-start gap-4">
-
-                <FaUserCircle className="text-gray-700 mt-1" />
-
-                <div>
-                  <p className="font-bold text-gray-800">
-                    Joining Date
-                  </p>
-
-                  <p className="text-gray-500">
-                    2024-01-15
-                  </p>
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
         </div>
 
-        {/* RIGHT SECTION */}
-        <div className="lg:col-span-2 bg-white rounded-3xl shadow-sm p-8">
+        {/* DETAILS GRID */}
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-200 p-6 md:p-8 space-y-6">
+          <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2 border-b pb-4">
+            <FaIdBadge className="text-red-500" /> Account & Contact Details
+          </h2>
 
-          {/* TITLE */}
-          <div className="flex items-center gap-3 mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+            <div className="flex justify-between py-3 border-b">
+              <span className="font-medium text-gray-500 flex items-center gap-2">
+                <FaUserCircle className="text-gray-400" /> Full Name
+              </span>
+              <span className="font-bold text-gray-800">{user?.name || "-"}</span>
+            </div>
 
-            <FaUserCircle className="text-red-400 text-2xl" />
+            <div className="flex justify-between py-3 border-b">
+              <span className="font-medium text-gray-500 flex items-center gap-2">
+                <FaEnvelope className="text-gray-400" /> Email Address
+              </span>
+              <span className="font-bold text-gray-800">{user?.email || "-"}</span>
+            </div>
 
-            <h2 className="text-4xl font-bold text-red-400">
-              Personal Details
-            </h2>
+            <div className="flex justify-between py-3 border-b">
+              <span className="font-medium text-gray-500 flex items-center gap-2">
+                <FaPhone className="text-gray-400" /> Phone Number
+              </span>
+              <span className="font-bold text-gray-800">{user?.phone || "Not Provided"}</span>
+            </div>
 
+            <div className="flex justify-between py-3 border-b">
+              <span className="font-medium text-gray-500 flex items-center gap-2">
+                <FaCalendarAlt className="text-gray-400" /> Date of Birth
+              </span>
+              <span className="font-bold text-gray-800">{user?.dob || "Not Provided"}</span>
+            </div>
+
+            <div className="flex justify-between py-3 border-b">
+              <span className="font-medium text-gray-500 flex items-center gap-2">
+                <FaBuilding className="text-gray-400" /> Department
+              </span>
+              <span className="font-bold text-gray-800">{user?.department || "N/A"}</span>
+            </div>
+
+            <div className="flex justify-between py-3 border-b">
+              <span className="font-medium text-gray-500 flex items-center gap-2">
+                <FaBriefcase className="text-gray-400" /> Job Position
+              </span>
+              <span className="font-bold text-gray-800">{user?.position || user?.designation || "N/A"}</span>
+            </div>
+
+            <div className="flex justify-between py-3 border-b">
+              <span className="font-medium text-gray-500 flex items-center gap-2">
+                <FaCalendarAlt className="text-gray-400" /> Joining Date
+              </span>
+              <span className="font-bold text-gray-800">{user?.joiningDate || "N/A"}</span>
+            </div>
+
+            <div className="flex justify-between py-3 border-b">
+              <span className="font-medium text-gray-500 flex items-center gap-2">
+                <FaCheckCircle className="text-green-500" /> Account Status
+              </span>
+              <span className="font-bold text-green-600 uppercase">{user?.status || "active"}</span>
+            </div>
+
+            <div className="md:col-span-2 flex justify-between py-3">
+              <span className="font-medium text-gray-500 flex items-center gap-2">
+                <FaMapMarkerAlt className="text-gray-400" /> Residential Address
+              </span>
+              <span className="font-bold text-gray-800">{user?.address || "Not Provided"}</span>
+            </div>
           </div>
-
-          {/* DETAILS */}
-          <div className="space-y-6">
-
-            <div className="grid grid-cols-2 border-b pb-3">
-              <p className="font-bold text-gray-800">
-                Full Name
-              </p>
-
-              <p className="text-gray-600 text-right">
-                {user?.name || "Priyanka Sharma"}
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 border-b pb-3">
-              <p className="font-bold text-gray-800">
-                Position
-              </p>
-
-              <p className="text-gray-600 text-right">
-                Software Developer
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 border-b pb-3">
-              <p className="font-bold text-gray-800">
-                Date Of Birth
-              </p>
-
-              <p className="text-gray-600 text-right">
-                2003-06-08
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 border-b pb-3">
-              <p className="font-bold text-gray-800">
-                Address
-              </p>
-
-              <p className="text-gray-600 text-right">
-                Yamunanagar, Haryana
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 border-b pb-3">
-              <p className="font-bold text-gray-800">
-                Aadhar No
-              </p>
-
-              <p className="text-gray-600 text-right">
-                123412341234
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 border-b pb-3">
-              <p className="font-bold text-gray-800">
-                Pan No
-              </p>
-
-              <p className="text-gray-600 text-right">
-                ABCDE1234F
-              </p>
-            </div>
-
-          </div>
-
-          {/* STATUS CIRCLE */}
-          <div className="flex justify-center mt-14">
-
-            <div className="relative w-32 h-32 rounded-full border-[18px] border-yellow-300 flex items-center justify-center">
-
-              <div className="text-center">
-
-                <h2 className="text-2xl font-bold text-yellow-500">
-                  7
-                </h2>
-
-                <p className="text-sm text-gray-500">
-                  pending
-                </p>
-
-              </div>
-
-            </div>
-
-          </div>
-
-          {/* LEGEND */}
-          <div className="flex justify-center gap-8 mt-8 flex-wrap">
-
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-green-400"></div>
-              <p className="text-gray-600">
-                Approved
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-red-400"></div>
-              <p className="text-gray-600">
-                Rejected
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-yellow-300"></div>
-              <p className="text-gray-600">
-                Pending
-              </p>
-            </div>
-
-          </div>
-
         </div>
-
       </div>
     </div>
   );

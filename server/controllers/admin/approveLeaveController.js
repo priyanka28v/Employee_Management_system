@@ -1,3 +1,5 @@
+import { Leave, LeaveBalance } from "../../models/Leave.js";
+
 export const approveLeave = async (req, res) => {
   try {
 

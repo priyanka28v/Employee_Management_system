@@ -8,52 +8,55 @@ import {
   FaGoogle,
   FaMicrosoft,
   FaEye,
+  FaEyeSlash,
 } from "react-icons/fa";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
 
-  try {
-    const response = await axios.post(
-      "http://127.0.0.1:5000/api/auth/login",
-      { email, password }
-    );
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:5000/api/auth/login",
+        { email, password }
+      );
 
-    if (response.data.success) {
-      const { token, user } = response.data;
+      if (response.data.success) {
+        const { token, user } = response.data;
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
 
-      login(user);
+        login(user);
 
-      // NAVIGATE
-      if (user.role === "Admin") {
-        navigate("/admin-dashboard");
+        if (user.role === "admin") {
+          navigate("/admin-dashboard");
+        } else {
+          navigate("/employee-dashboard");
+        }
+      }
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.error) {
+        setError(error.response.data.error);
       } else {
-        navigate("/employee-dashboard");
+        setError("Server error during login. Please ensure backend server is running.");
       }
     }
-  } catch (error) {
-    if (error.response && !error.response.data.success) {
-      setError(error.response.data.error);
-    } else {
-      setError("Server error");
-    }
-  }
-};
+  };
 
   return (
     <div className="min-h-screen bg-[#f6f3f4] flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-6xl bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
+
         {/* Left Side */}
         <div className="bg-[#fdf5f6] flex flex-col justify-center items-center p-10 relative">
           <h1 className="text-4xl font-bold text-gray-800 mb-3">
@@ -73,6 +76,8 @@ const handleSubmit = async (e) => {
 
         {/* Right Side */}
         <div className="p-10 md:p-14 flex flex-col justify-center">
+
+          {/* Heading */}
           <div className="text-center mb-8">
             <h2 className="text-4xl font-bold text-[#ff4d67]">
               Log In <span className="text-gray-800">User</span>
@@ -85,9 +90,14 @@ const handleSubmit = async (e) => {
             </div>
           </div>
 
-          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+          {/* Error */}
+          {error && (
+            <p className="text-red-500 text-center mb-4">{error}</p>
+          )}
 
+          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
+
             {/* Email */}
             <div>
               <label className="text-sm font-medium text-gray-700 mb-2 block">
@@ -105,6 +115,7 @@ const handleSubmit = async (e) => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full p-3 outline-none"
+                  required
                 />
               </div>
             </div>
@@ -121,15 +132,19 @@ const handleSubmit = async (e) => {
                 </span>
 
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="********"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full p-3 outline-none"
+                  required
                 />
 
-                <span className="px-4 text-gray-400 cursor-pointer">
-                  <FaEye />
+                <span
+                  className="px-4 text-gray-400 cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </span>
               </div>
             </div>
@@ -185,6 +200,16 @@ const handleSubmit = async (e) => {
               Register here
             </span>
           </p>
+
+          {/* Demo Admin Credentials */}
+          <div className="mt-6 bg-pink-50 border border-pink-200 rounded-xl p-4 text-sm">
+            <h3 className="font-semibold text-pink-600 mb-2">
+              Admin Login
+            </h3>
+
+            <p>Email: admin@gmail.com</p>
+            <p>Password: admin123</p>
+          </div>
         </div>
       </div>
     </div>

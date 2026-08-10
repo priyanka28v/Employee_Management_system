@@ -1,3 +1,5 @@
+import { Leave } from "../../models/Leave.js";
+
 export const rejectLeave = async (req, res) => {
   try {
 

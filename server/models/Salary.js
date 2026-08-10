@@ -23,6 +23,11 @@ const salarySchema = new mongoose.Schema(
       required: true,
     },
 
+    allowances: {
+      type: Number,
+      default: 0,
+    },
+
     bonus: {
       type: Number,
       default: 0,
@@ -51,6 +56,10 @@ const salarySchema = new mongoose.Schema(
     totalSalary: {
       type: Number,
       required: true,
+    },
+
+    netSalary: {
+      type: Number,
     },
 
     status: {
