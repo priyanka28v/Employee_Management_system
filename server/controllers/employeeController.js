@@ -114,12 +114,22 @@ export const addEmployee = async (req, res) => {
 
     await user.save();
 
-    // Create default leave balance
+    // Create leave balance using provided totals or defaults
+    const {
+      casualLeaveTotal,
+      sickLeaveTotal,
+      earnedLeaveTotal,
+      privilegeLeaveTotal,
+      compOffTotal,
+    } = req.body;
+
     await LeaveBalance.create({
       user: user._id,
-      casualLeave: { total: 12, used: 0 },
-      sickLeave: { total: 10, used: 0 },
-      earnedLeave: { total: 15, used: 0 },
+      casualLeave: { total: casualLeaveTotal !== undefined ? Number(casualLeaveTotal) : 12, used: 0 },
+      sickLeave: { total: sickLeaveTotal !== undefined ? Number(sickLeaveTotal) : 10, used: 0 },
+      earnedLeave: { total: earnedLeaveTotal !== undefined ? Number(earnedLeaveTotal) : 15, used: 0 },
+      privilegeLeave: { total: privilegeLeaveTotal !== undefined ? Number(privilegeLeaveTotal) : 0, used: 0 },
+      compOff: { total: compOffTotal !== undefined ? Number(compOffTotal) : 0, used: 0 },
     });
 
     res.status(201).json({

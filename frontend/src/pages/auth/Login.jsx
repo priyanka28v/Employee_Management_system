@@ -33,10 +33,7 @@ const Login = () => {
       if (response.data.success) {
         const { token, user } = response.data;
 
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
-
-        login(user);
+        login(user, token);
 
         if (user.role === "admin") {
           navigate("/admin-dashboard");

@@ -26,6 +26,7 @@ import DepartmentList from "./components/departments/DepartmentList";
 import AddDepartment from "./components/departments/AddDepartment";
 import EmployeeList from "./components/employee/EmployeeList";
 import AddEmployee from "./components/employee/AddEmployee";
+import EditEmployee from "./components/employee/EditEmployee";
 import EmployeeDetail from "./components/employee/EmployeeDetail";
 import AdminLeaves from "./pages/leaves/AdminLeaves";
 import AdminSalary from "./pages/salary/AdminSalary";
@@ -78,7 +79,7 @@ function App() {
           <Route path="employees" element={<EmployeeList />} />
           <Route path="add-employee" element={<AddEmployee />} />
           <Route path="employees/:id" element={<EmployeeDetail />} />
-          <Route path="employees/edit/:id" element={<AddEmployee />} />
+          <Route path="employees/edit/:id" element={<EditEmployee />} />
 
           {/* DEPARTMENTS */}
           <Route path="departments" element={<DepartmentList />} />

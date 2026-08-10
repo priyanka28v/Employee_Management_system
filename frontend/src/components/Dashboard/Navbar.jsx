@@ -1,18 +1,24 @@
 import React from "react";
 import { useAuth } from "../../context/authContext";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   // Decide title based on current route
   const getTitle = () => {
-    if (location.pathname.includes("departments")) return "Department";
-    if (location.pathname.includes("employees")) return "Employee";
-    if (location.pathname.includes("leave")) return "Leave";
-    if (location.pathname.includes("salary")) return "Salary";
-    return "Dashboard";
+    if (location.pathname.includes('departments')) return 'Department';
+    if (location.pathname.includes('employees')) return 'Employee';
+    if (location.pathname.includes('leave')) return 'Leave';
+    if (location.pathname.includes('salary')) return 'Salary';
+    return 'Dashboard';
   };
 
   return (
@@ -29,7 +35,10 @@ const Navbar = () => {
           <p className="font-medium text-gray-800">{user?.name}</p>
         </div>
 
-        <button className="px-4 py-2 rounded-lg bg-teal-600 text-white text-sm hover:bg-teal-700 transition">
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 rounded-lg bg-teal-600 text-white text-sm hover:bg-teal-700 transition"
+        >
           Logout
         </button>
       </div>

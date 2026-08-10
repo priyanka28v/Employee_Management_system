@@ -7,6 +7,7 @@ import {
   updateEmployee,
   toggleEmployeeStatus,
 } from "../controllers/employeeController.js";
+import { updateLeaveAllocation, upsertSalary } from "../controllers/employeeLeaveSalaryController.js";
 
 const router = express.Router();
 
@@ -24,5 +25,6 @@ router.put("/:id", verifyUser, verifyAdmin, updateEmployee);
 
 // TOGGLE STATUS (ACTIVATED/DEACTIVATED)
 router.patch("/:id/status", verifyUser, verifyAdmin, toggleEmployeeStatus);
-
+router.patch("/:id/leave-allocation", verifyUser, verifyAdmin, updateLeaveAllocation);
+router.patch("/:id/salary", verifyUser, verifyAdmin, upsertSalary);
 export default router;

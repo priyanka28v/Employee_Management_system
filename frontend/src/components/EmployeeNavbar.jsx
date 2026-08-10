@@ -8,9 +8,10 @@ import {
 
 const EmployeeNavbar = ({ user }) => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.clear();
+    logout();
     navigate("/login");
   };
 

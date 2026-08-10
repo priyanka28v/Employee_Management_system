@@ -233,25 +233,30 @@ const EmployeeList = () => {
                     <td className="py-3.5 px-4">
                       <div className="flex items-center justify-center gap-2">
                         <button
-                          onClick={() => navigate(`/admin-dashboard/employee-details/${emp._id}`)}
+                          onClick={() => navigate(`/admin-dashboard/employees/${emp._id}`)}
                           title="View Profile Details"
                           className="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition"
                         >
                           <FaEye />
                         </button>
                         <button
-                          onClick={() =>
-                            handleToggleStatus(emp._id, emp.status)
-                          }
-                          title={emp.status === "active" ? "Deactivate Account" : "Activate Account"}
-                          className={`p-2 rounded-lg transition ${
-                            emp.status === "active"
-                              ? "bg-amber-50 text-amber-600 hover:bg-amber-100"
-                              : "bg-green-50 text-green-600 hover:bg-green-100"
-                          }`}
-                        >
-                          {emp.status === "active" ? <FaUserSlash /> : <FaUserCheck />}
-                        </button>
+  onClick={() => navigate(`/admin-dashboard/employees/edit/${emp._id}`)}
+  title="Edit Employee"
+  className="p-2 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition"
+>
+  <FaEdit />
+</button>
+<button
+  onClick={() => handleToggleStatus(emp._id, emp.status)}
+  title={emp.status === "active" ? "Deactivate Account" : "Activate Account"}
+  className={`p-2 rounded-lg transition ${
+    emp.status === "active"
+      ? "bg-amber-50 text-amber-600 hover:bg-amber-100"
+      : "bg-green-50 text-green-600 hover:bg-green-100"
+  }`}
+>
+  {emp.status === "active" ? <FaUserSlash /> : <FaUserCheck />}
+</button>
                       </div>
                     </td>
                   </tr>

@@ -30,6 +30,20 @@ const AddEmployee = () => {
     position: "",
     joiningDate: "",
     address: "",
+    // Leave allocation (optional)
+    casualLeaveTotal: "",
+    sickLeaveTotal: "",
+    earnedLeaveTotal: "",
+    privilegeLeaveTotal: "",
+    compOffTotal: "",
+    // Salary allocation (optional)
+    basicSalary: "",
+    allowances: "",
+    deductions: "",
+    bonus: "",
+    month: "",
+    year: "",
+    paymentStatus: "Paid",
   });
 
   const [departmentsList, setDepartmentsList] = useState([]);
