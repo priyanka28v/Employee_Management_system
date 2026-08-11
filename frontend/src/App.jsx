@@ -5,6 +5,10 @@ import Notifications from "./pages/Notifications.jsx";
 
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
+import Home from "./pages/Home.jsx";
+import Features from "./pages/Features.jsx";
+import About from "./pages/About.jsx";
+import Contact from "./pages/Contact.jsx";
 
 /* ================= DASHBOARDS ================= */
 
@@ -51,7 +55,11 @@ function App() {
       <Routes>
         {/* ================= DEFAULT ================= */}
 
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Home />} />
+<Route path="/features" element={<Features />} />
+<Route path="/about" element={<About />} />
+<Route path="/contact" element={<Contact />} />
+{/* ================= AUTH ================= */}
 
         {/* ================= AUTH ================= */}
 

@@ -5,6 +5,7 @@ import {
   FaSignOutAlt,
   FaBell,
 } from "react-icons/fa";
+import { useAuth } from "../context/authContext";
 
 const EmployeeNavbar = ({ user }) => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const EmployeeNavbar = ({ user }) => {
   };
 
   return (
-    <nav className="bg-[#0f172a] text-white px-8 py-4 shadow-lg border-b border-slate-800">
+    <nav class="bg-white/10 backdrop-blur-xl border-b border-white/20 shadow-lg sticky top-0 z-30 px-6 py-3 md:px-8 flex items-center justify-between text-white">
       <div className="flex items-center justify-between">
 
         {/* LEFT LOGO */}

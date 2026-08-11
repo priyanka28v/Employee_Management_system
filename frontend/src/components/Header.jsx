@@ -23,8 +23,8 @@ const Header = () => {
   };
 
   return (
-    <header className="h-16 flex items-center justify-between px-6 md:px-8 bg-white bg-opacity-90 backdrop-filter backdrop-blur-lg border-b border-gray-200 sticky top-0 z-20 shadow-sm">
-      <h2 className="text-lg font-semibold text-gray-800">{getTitle()}</h2>
+    <header className="bg-white/10 backdrop-blur-xl border-b border-white/20 shadow-lg sticky top-0 z-20 px-6 py-3 md:px-8 flex items-center justify-between">
+      <h2 className="text-lg font-semibold text-white">WorkSphere</h2>
       <div className="flex items-center gap-4">
         <div className="text-right mr-4">
           <p className="text-sm text-gray-500">Welcome</p>
