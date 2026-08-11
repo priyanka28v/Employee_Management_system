@@ -30,7 +30,8 @@ app.use("/api/attendance", attendanceRoutes);
 app.use("/api/salary", salaryRoutes);
 app.use("/api/dashboard", dashboardRouter);
 app.use("/api/employees", employeeRouter);
-
+import notificationRoutes from "./routes/notificationRoutes.js";
+app.use("/api/notifications", notificationRoutes);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

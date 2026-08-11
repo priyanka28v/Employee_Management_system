@@ -11,6 +11,7 @@ import {
   FaCog,
   FaClipboardList,
   FaUserShield,
+  FaBell,
 } from "react-icons/fa";
 
 const AdminSide = () => {
@@ -60,7 +61,7 @@ const AdminSide = () => {
         </div>
 
         {/* MENU */}
-        <div className="px-4 py-6 space-y-2">
+          <div className="px-4 py-6 space-y-2 overflow-y-auto flex-1">
 
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest px-3 mb-4">
             Main Menu
@@ -110,6 +111,15 @@ const AdminSide = () => {
           >
             <FaCalendarAlt size={18} />
             <span>Leave Requests</span>
+          </NavLink>
+
+          {/* NOTIFICATIONS */}
+          <NavLink
+            to="/admin-dashboard/notifications"
+            className={navStyle}
+          >
+            <FaBell size={18} />
+            <span>Notifications</span>
           </NavLink>
 
           {/* SALARY */}

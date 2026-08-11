@@ -1,4 +1,5 @@
 import { Leave, LeaveBalance } from "../models/Leave.js";
+import { sendAdminNotification } from "../utils/emailService.js";
 
 // ✅ APPLY LEAVE
 export const applyLeave = async (req, res) => {
@@ -85,6 +86,8 @@ export const applyLeave = async (req, res) => {
       reason,
       status: "pending",
     });
+    // Notify admin of leave application
+    await sendAdminNotification('Leave Applied', req.user);
 
     res.status(201).json({
       success: true,

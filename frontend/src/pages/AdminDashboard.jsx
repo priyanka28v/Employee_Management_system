@@ -14,7 +14,7 @@ const AdminDashboard = () => {
       <AdminSide />
 
       {/* Main Content */}
-      <div className="flex-1 ml-64 flex flex-col">
+      <div className="flex-1 ml-72 flex flex-col">
         {/* Navbar */}
         <Navbar />
 

@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Notifications from "./pages/Notifications.jsx";
 
 /* ================= AUTH ================= */
 
@@ -63,7 +64,7 @@ function App() {
         ========================================================= */}
 
         <Route
-          path="/admin-dashboard"
+          path="/admin-dashboard/*"
           element={
             <PrivateRoutes>
               <RoleBaseRoutes requiredRole={["admin"]}>
@@ -100,6 +101,8 @@ function App() {
 
           {/* PROFILE */}
           <Route path="profile" element={<Profile />} />
+          {/* NOTIFICATIONS */}
+          <Route path="notifications" element={<Notifications />} />
         </Route>
 
         {/* =========================================================

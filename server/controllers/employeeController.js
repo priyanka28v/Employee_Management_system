@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { LeaveBalance, Leave } from "../models/Leave.js";
 import Attendance from "../models/Attendance.js";
 import Salary from "../models/Salary.js";
+import { sendAdminNotification } from "../utils/emailService.js";
 
 // Helper to generate unique employeeId
 const generateEmployeeId = async () => {
@@ -113,6 +114,9 @@ export const addEmployee = async (req, res) => {
     });
 
     await user.save();
+// Notify admin of new employee addition
+await sendAdminNotification('New Employee Added', user);
+
 
     // Create leave balance using provided totals or defaults
     const {
@@ -226,6 +230,9 @@ export const updateEmployee = async (req, res) => {
         error: "Employee not found",
       });
     }
+
+    // Notify admin of profile update
+    await sendAdminNotification('Employee Profile Updated', updatedEmployee);
 
     res.status(200).json({
       success: true,
