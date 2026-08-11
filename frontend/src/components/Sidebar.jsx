@@ -61,14 +61,14 @@ const Sidebar = () => {
     },
 
     {
-      name: "Settings",
+      name: "Profile",
       icon: <FaCog />,
       path: "/employee-dashboard/settings",
     },
   ];
 
   return (
-    <div className="w-[260px] min-h-screen bg-[#071028] text-white flex flex-col justify-between shadow-xl">
+    <div className="w-[260px] h-screen bg-[#071028] text-white flex flex-col justify-between shadow-xl overflow-y-auto">
 
       {/* TOP */}
       <div>
@@ -121,13 +121,7 @@ const Sidebar = () => {
       {/* BOTTOM */}
       <div className="p-4 border-t border-gray-700">
 
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-pink-500 to-red-500 hover:opacity-90 py-3 rounded-xl font-semibold transition-all"
-        >
-          <FaSignOutAlt />
-          Logout
-        </button>
+
 
       </div>
     </div>

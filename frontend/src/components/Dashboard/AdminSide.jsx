@@ -32,7 +32,7 @@ const AdminSide = () => {
      }`;
 
   return (
-    <div className="w-72 h-screen bg-[#f7fbfb] border-r border-gray-200 fixed left-0 top-0 flex flex-col justify-between overflow-hidden">
+    <div className="w-72 h-screen bg-[#f7fbfb] border-r border-gray-200 fixed left-0 top-0 flex flex-col justify-between overflow-y-auto">
 
       {/* TOP SECTION */}
       <div>
@@ -137,7 +137,7 @@ const AdminSide = () => {
             className={navStyle}
           >
             <FaCog size={18} />
-            <span>Settings</span>
+            <span>Profile</span>
           </NavLink>
 
         </div>
@@ -167,12 +167,7 @@ const AdminSide = () => {
 
           </div>
 
-          <button
-            onClick={handleLogout}
-            className="w-full mt-4 bg-gradient-to-r from-[#14b8a6] to-[#0f766e] text-white py-2.5 rounded-2xl font-medium hover:opacity-90 transition shadow-sm"
-          >
-            Logout
-          </button>
+
 
         </div>
 
