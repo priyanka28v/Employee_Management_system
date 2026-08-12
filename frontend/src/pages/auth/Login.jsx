@@ -52,7 +52,7 @@ const Login = () => {
   };
 
   return (
-   <div className="min-h-[70vh] bg-[#f6f3f4] w-full flex flex-col px-0 pt-0 pb-10">
+   <div className="min-h-[60vh] bg-[#f6f3f4] w-full flex flex-col px-0 pt-0 pb-10">
   <HomeNavbar />
   <div className="w-full bg-white shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2 rounded-none md:rounded-3xl">
 
@@ -170,14 +170,14 @@ const Login = () => {
           </form>
 
           {/* Divider */}
-          <div className="flex items-center gap-4 my-8">
+          {/* <div className="flex items-center gap-4 my-8">
             <div className="flex-1 h-[1px] bg-gray-200"></div>
             <p className="text-gray-400 text-sm">or continue with</p>
             <div className="flex-1 h-[1px] bg-gray-200"></div>
-          </div>
+          </div> */}
 
           {/* Social Buttons */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <button className="border rounded-lg py-3 flex items-center justify-center gap-3 hover:bg-gray-50 transition">
               <FaGoogle className="text-red-500" />
               Continue with Google
@@ -187,7 +187,7 @@ const Login = () => {
               <FaMicrosoft className="text-blue-500" />
               Continue with Microsoft
             </button>
-          </div>
+          </div> */}
 
           {/* Signup */}
           <p className="text-center text-gray-500 mt-8 text-sm">

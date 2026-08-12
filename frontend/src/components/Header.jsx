@@ -1,6 +1,6 @@
 import React from "react";
 import { useAuth } from "../context/authContext";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 
 const Header = () => {
   const { user, logout } = useAuth();
@@ -24,7 +24,7 @@ const Header = () => {
 
   return (
     <header className="bg-white/10 backdrop-blur-xl border-b border-white/20 shadow-lg sticky top-0 z-20 px-6 py-3 md:px-8 flex items-center justify-between">
-      <h2 className="text-lg font-semibold text-white">WorkSphere</h2>
+      <h2 className="text-lg font-semibold text-white">|</h2>
       <div className="flex items-center gap-4">
         <div className="text-right mr-4">
           <p className="text-sm text-gray-500">Welcome</p>
@@ -41,4 +41,3 @@ const Header = () => {
   );
 };
 
-export default Header;

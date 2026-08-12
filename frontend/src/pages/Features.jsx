@@ -3,8 +3,11 @@ import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import { FaUserTie, FaBuilding, FaClock, FaRegCalendarAlt, FaMoneyBillWave, FaKey, FaChartBar, FaDatabase, FaRobot, FaCheckCircle, FaArrowRight } from "react-icons/fa";
 import Header from "../components/Header";
+import HomeNavbar from "../components/HomeNavbar";
+import { useAuth } from "../context/authContext";
 
 const Features = () => {
+  const { user } = useAuth();
   const sections = [
     {
       icon: <FaUserTie className="text-5xl text-pink-600 mr-4" />, // Employee Management
@@ -69,7 +72,7 @@ const Features = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-pink-50 via-white to-pink-100 text-gray-800">
-      <Header />
+      <HomeNavbar />
       {/* Hero */}
       <section className="py-16 px-6 md:px-12 lg:px-24 text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold text-pink-600 mb-4">
@@ -105,6 +108,7 @@ const Features = () => {
       </section>
 
       {/* Call to Action */}
+       {!user && (
       <section className="py-12 bg-[#fdf5f6]/5 backdrop-blur-md text-center rounded-2xl mx-6 md:mx-12 lg:mx-24 mb-12">
         <h2 className="text-3xl font-semibold text-gray-800 mb-4">
           Ready to experience the full power of WorkSphere?
@@ -116,7 +120,7 @@ const Features = () => {
           Get Started / Login
         </Link>
       </section>
-
+       )}
         <Footer />
     </div>
   );

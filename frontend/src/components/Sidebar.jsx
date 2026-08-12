@@ -24,11 +24,11 @@ const Sidebar = () => {
   };
 
   const menuItems = [
-    {
-      name: "Dashboard",
-      icon: <FaTachometerAlt />,
-      path: "/employee-dashboard",
-    },
+    // {
+    //   name: "Dashboard",
+    //   icon: <FaTachometerAlt />,
+    //   path: "/employee-dashboard",
+    // },
     {
       name: "My Attendance",
       icon: <FaCalendarCheck />,
@@ -81,7 +81,7 @@ const Sidebar = () => {
             </NavLink>
           ))}
         </div>
-        <div className="p-3 mt-9 border-t border-gray-700">
+        {/* <div className="p-3 mt-9 border-t border-gray-700">
           <button
             onClick={handleLogout}
             className="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-[#13203d] text-gray-300 w-full transition-all duration-300"
@@ -89,7 +89,7 @@ const Sidebar = () => {
             <FaSignOutAlt className="text-lg" />
             <span className="font-medium">Logout</span>
           </button>
-        </div>
+        </div> */}
       </div>
 
       {/* BOTTOM - Fixed typo: p-4 instead of p */}
