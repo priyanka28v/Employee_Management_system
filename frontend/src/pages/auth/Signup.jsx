@@ -241,7 +241,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4 py-10">
+    <div className="min-h-screen flex flex-col bg-gradient-to-r from-blue-50 to-indigo-50 text-gray-800">
   <HomeNavbar />
       <div className="w-full max-w-6xl bg-white rounded-2xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
         

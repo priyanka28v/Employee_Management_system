@@ -52,9 +52,9 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f6f3f4] flex flex-col items-center justify-center px-4 py-10">
-      <HomeNavbar />
-      <div className="w-full max-w-6xl bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
+   <div className="min-h-screen bg-[#f6f3f4] w-full flex flex-col px-0 pt-0 pb-10">
+  <HomeNavbar />
+  <div className="w-full bg-white shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2 rounded-none md:rounded-3xl">
 
         {/* Left Side */}
         <div className="bg-[#fdf5f6] flex flex-col justify-center items-center p-10 relative">

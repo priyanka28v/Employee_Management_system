@@ -7,22 +7,22 @@ const HomeNavbar = () => {
   const { user } = useAuth();
 
   return (
-    <nav className="bg-gradient-to-r from-[#0f172a] to-[#1e293b] backdrop-blur-xl border-b border-white/20 shadow-lg sticky top-0 z-30 px-6 py-3 md:px-8 flex items-center justify-between text-white">
+    <nav className="bg-[#f6f3f4] backdrop-blur-xl border-b border-gray-200 shadow-lg sticky top-0 z-30 px-6 py-3 md:px-8 flex items-center justify-between text-gray-800">
       {/* LOGO SECTION */}
       <div className="flex items-center gap-3 cursor-pointer flex-shrink-0" onClick={() => window.location.href = '/' }>
         <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 via-red-500 to-orange-400 flex items-center justify-center shadow-xl">
           <div className="w-6 h-6 border-2 border-white rounded-md rotate-12"></div>
           <div className="absolute inset-0 rounded-2xl bg-white/15 blur-md"></div>
         </div>
-        <h1 className="text-2xl font-bold tracking-wide text-cyan-100">WorkSphere</h1>
+        <h1 className="text-2xl font-bold tracking-wide text-gray-800">WorkSphere</h1>
       </div>
 
       {/* NAV LINKS */}
       <div className="flex items-center space-x-4 md:space-x-6 flex-shrink-0">
         {/* <Link to="/" className="text-cyan-100 hover:text-cyan-200 transition-colors">Home</Link> */}
-        <Link to="/about" className="text-cyan-100 hover:text-cyan-200 transition-colors">About</Link>
-        <Link to="/features" className="text-cyan-100 hover:text-cyan-200 transition-colors">Features</Link>
-        <Link to="/contact" className="text-cyan-100 hover:text-cyan-200 transition-colors">Contact</Link>
+        <Link to="/about" className="text-gray-800 hover:text-gray-900 transition-colors">About</Link>
+        <Link to="/features" className="text-gray-800 hover:text-gray-900 transition-colors">Features</Link>
+        <Link to="/contact" className="text-gray-800 hover:text-gray-900 transition-colors">Contact</Link>
         {user ? (
           // Notification icon for logged‑in users
           <div className="flex items-center gap-3 flex-shrink-0">
@@ -34,8 +34,8 @@ const HomeNavbar = () => {
         ) : (
           // Login / Signup for guests
           <>
-            <Link to="/login" className="ml-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition whitespace-nowrap">Login</Link>
-            <Link to="/signup" className="ml-2 px-4 py-2 bg-cyan-600 text-white rounded-md hover:bg-cyan-700 transition whitespace-nowrap">Signup</Link>
+            <Link to="/login" className="ml-2 px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600 transition whitespace-nowrap">Login</Link>
+            <Link to="/signup" className="ml-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition whitespace-nowrap">Signup</Link>
           </>
         )}
       </div>
