@@ -1,4 +1,5 @@
 import React from "react";
+import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 
@@ -131,18 +132,7 @@ const About = () => {
         </Link>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 py-6 text-center text-sm text-gray-400 mt-auto">
-        <div className="mx-auto max-w-4xl">
-          <p className="mb-2">© {new Date().getFullYear()} WorkSphere EMS</p>
-          <nav className="flex justify-center space-x-4">
-            <Link to="/" className="hover:underline">Home</Link>
-            <Link to="/features" className="hover:underline">Features</Link>
-            <Link to="/about" className="hover:underline">About</Link>
-            <Link to="/contact" className="hover:underline">Contact</Link>
-          </nav>
-        </div>
-      </footer>
+        <Footer />
     </div>
   );
 };

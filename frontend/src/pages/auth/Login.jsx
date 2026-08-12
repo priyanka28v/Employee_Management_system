@@ -10,6 +10,7 @@ import {
   FaEye,
   FaEyeSlash,
 } from "react-icons/fa";
+import HomeNavbar from "../../components/HomeNavbar";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -51,7 +52,8 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f6f3f4] flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-[#f6f3f4] flex flex-col items-center justify-center px-4 py-10">
+      <HomeNavbar />
       <div className="w-full max-w-6xl bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
 
         {/* Left Side */}

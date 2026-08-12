@@ -19,9 +19,9 @@ const HomeNavbar = () => {
 
       {/* NAV LINKS */}
       <div className="flex items-center space-x-4 md:space-x-6 flex-shrink-0">
-        <Link to="/" className="text-cyan-100 hover:text-cyan-200 transition-colors">Home</Link>
-        <Link to="/features" className="text-cyan-100 hover:text-cyan-200 transition-colors">Features</Link>
+        {/* <Link to="/" className="text-cyan-100 hover:text-cyan-200 transition-colors">Home</Link> */}
         <Link to="/about" className="text-cyan-100 hover:text-cyan-200 transition-colors">About</Link>
+        <Link to="/features" className="text-cyan-100 hover:text-cyan-200 transition-colors">Features</Link>
         <Link to="/contact" className="text-cyan-100 hover:text-cyan-200 transition-colors">Contact</Link>
         {user ? (
           // Notification icon for logged‑in users
