@@ -7,7 +7,7 @@ import HomeNavbar from "../components/HomeNavbar";
 
 const About = () => {
   const { user } = useAuth();
-    return (<div className="min-h-screen flex flex-col bg-[#f6f3f4] text-gray-800">
+    return (<div className="min-h-screen flex flex-col bg-gradient-to-br from-pink-50 via-white to-pink-100 text-gray-800">
       <HomeNavbar />
       {/* Hero Section */}
       <section className="flex flex-col md:flex-row items-center justify-center py-12 px-6 md:px-12 lg:px-24">
@@ -28,9 +28,9 @@ const About = () => {
       </section>
 
       {/* About EMS */}
-      <section className="bg-[#fdf5f6] backdrop-blur-lg rounded-2xl mx-6 md:mx-12 lg:mx-24 p-8 mb-8">
+      <section className="bg-[#fdf5f6] backdrop-blur-lg rounded-2xl border border-pink-200 shadow-md mx-6 md:mx-12 lg:mx-24 p-8 mb-8">
         <h2 className="text-3xl font-semibold text-gray-800 mb-4">About EMS</h2>
-        <p className="text-gray-200 leading-relaxed mb-4">
+        <p className="text-gray-800 leading-relaxed mb-4">
           WorkSphere is a modern, premium employee management system designed to streamline HR workflows, boost productivity, and provide insightful analytics. It offers a centralized platform for managing employee information, attendance, leaves, salary, departments, and other employee‑related activities.
         </p>
       </section>
@@ -59,9 +59,9 @@ const About = () => {
       </section>
 
       {/* Why Choose EMS */}
-      <section className="bg-[#fdf5f6]/10 backdrop-blur-lg rounded-2xl mx-6 md:mx-12 lg:mx-24 p-8 mb-12">
+      <section className="bg-[#fdf5f6]/10 backdrop-blur-lg rounded-2xl border border-pink-200 shadow-md mx-6 md:mx-12 lg:mx-24 p-8 mb-12">
         <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center">Why Choose EMS</h2>
-        <ul className="list-disc list-inside space-y-2 text-gray-200 max-w-2xl mx-auto">
+        <ul className="list-disc list-inside space-y-2 text-gray-800 max-w-2xl mx-auto">
           <li>Easy to use interface with minimal learning curve.</li>
           <li>All employee data centralized in one secure location.</li>
           <li>Saves time and reduces manual paperwork.</li>
@@ -92,16 +92,16 @@ const About = () => {
       <section className="mx-6 md:mx-12 lg:mx-24 mb-12">
         <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">Roles</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-[#fdf5f6]/10 backdrop-blur-md rounded-xl p-6">
+          <div className="bg-[#fdf5f6]/10 backdrop-blur-md rounded-xl border border-pink-200 p-6">
             <h3 className="text-2xl font-bold text-gray-800 mb-2">Admin</h3>
-            <ul className="list-disc list-inside text-gray-200 space-y-1">
+            <ul className="list-disc list-inside text-gray-800 space-y-1">
               <li>Manage employees, departments, attendance, leaves and salary.</li>
               <li>Configure system settings and permissions.</li>
             </ul>
           </div>
-          <div className="bg-[#fdf5f6]/10 backdrop-blur-md rounded-xl p-6">
+          <div className="bg-[#fdf5f6]/10 backdrop-blur-md rounded-xl border border-pink-200 p-6">
             <h3 className="text-2xl font-bold text-gray-800 mb-2">Employee</h3>
-            <ul className="list-disc list-inside text-gray-200 space-y-1">
+            <ul className="list-disc list-inside text-gray-800 space-y-1">
               <li>View personal profile, attendance records and salary.</li>
               <li>Apply for leaves and track request status.</li>
             </ul>
@@ -112,7 +112,7 @@ const About = () => {
       {/* Technology */}
       <section className="bg-[#fdf5f6]/10 backdrop-blur-lg rounded-2xl mx-6 md:mx-12 lg:mx-24 p-8 mb-12">
         <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center">Built With</h2>
-        <ul className="flex flex-wrap justify-center gap-4 text-gray-200">
+        <ul className="flex flex-wrap justify-center gap-4 text-gray-800">
           <li>React.js</li>
           <li>Node.js</li>
           <li>Express.js</li>
@@ -122,9 +122,9 @@ const About = () => {
       </section>
 
       {/* Call To Action */}
-      <section className="flex flex-col items-center py-12 bg-[#fdf5f6] backdrop-blur-md rounded-2xl mx-6 md:mx-12 lg:mx-24 mb-12">
+      <section className="flex flex-col items-center py-12 bg-[#fdf5f6] backdrop-blur-md rounded-2xl border border-pink-200 shadow-md mx-6 md:mx-12 lg:mx-24 mb-12">
         <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center">Ready to simplify employee management?</h2>
-        <Link to="/login" className="mt-4 px-8 py-3 bg-pink-500 hover:bg-pink-600 rounded-md text-white font-medium transition-colors">
+        <Link to="/login" className="mt-4 px-8 py-3 bg-pink-500 hover:bg-pink-600 rounded-md text-white font-medium transition-colors shadow-md hover:shadow-lg">
           Get Started / Login
         </Link>
       </section>

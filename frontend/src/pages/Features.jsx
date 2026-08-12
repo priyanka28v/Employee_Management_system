@@ -68,7 +68,7 @@ const Features = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f6f3f4] text-gray-800">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-pink-50 via-white to-pink-100 text-gray-800">
       <HomeNavbar />
       {/* Hero */}
       <section className="py-16 px-6 md:px-12 lg:px-24 text-center">
