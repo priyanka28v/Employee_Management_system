@@ -9,6 +9,7 @@ import {
   FaClock,
   FaInfoCircle,
   FaPaperPlane,
+  FaArrowLeft,
 } from "react-icons/fa";
 
 const ApplyLeave = () => {
@@ -19,11 +20,58 @@ const ApplyLeave = () => {
     reason: "",
   });
 
+  // State for edit mode and route params
   const [isEdit, setIsEdit] = useState(false);
-
   const { id } = useParams();
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+
+  const [leaveBalance, setLeaveBalance] = useState([]); // Initialize as empty array
+
+  // Fetch leave balance for the logged‑in employee
+  const fetchLeaveBalance = async () => {
+    try {
+      const res = await axios.get('http://127.0.0.1:5000/api/leave/balance', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      // Transform object balance into an array for UI rendering
+      const bal = res.data.balance || {};
+      const typeMap = {
+        casualLeave: 'Casual Leave',
+        sickLeave: 'Sick Leave',
+        earnedLeave: 'Earned Leave',
+        privilegeLeave: 'Privilege Leave',
+        compOff: 'Comp Off',
+      };
+      const colorMap = {
+        casualLeave: 'blue',
+        sickLeave: 'red',
+        earnedLeave: 'green',
+        privilegeLeave: 'purple',
+        compOff: 'orange',
+      };
+      const arr = [];
+      Object.keys(typeMap).forEach((field) => {
+        if (bal[field]) {
+          arr.push({
+            type: typeMap[field],
+            used: bal[field].used,
+            total: bal[field].total,
+            color: colorMap[field] || 'gray',
+          });
+        }
+      });
+      setLeaveBalance(arr);
+    } catch (err) {
+      console.error('Error fetching leave balance', err);
+      setLeaveBalance([]);
+    }
+  };
+
+  // Load balance on component mount
+  useEffect(() => {
+    if (token) fetchLeaveBalance();
+  }, [token]);
 
   // Fetch leave for edit
   const fetchLeaveById = async () => {
@@ -41,9 +89,9 @@ const ApplyLeave = () => {
 
       setForm({
         leaveType: leave.leaveType || "",
-        startDate: leave.startDate.split("T")[0],
-        endDate: leave.endDate.split("T")[0],
-        reason: leave.reason,
+        startDate: leave.startDate ? leave.startDate.split("T")[0] : "",
+        endDate: leave.endDate ? leave.endDate.split("T")[0] : "",
+        reason: leave.reason || "",
       });
 
       setIsEdit(true);
@@ -72,6 +120,7 @@ const ApplyLeave = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Submit button clicked', form);
 
     // Date validation
     if (new Date(form.endDate) < new Date(form.startDate)) {
@@ -82,33 +131,52 @@ const ApplyLeave = () => {
       });
     }
 
+    // Compute total days (inclusive)
+    const totalDays = Math.ceil(
+      (new Date(form.endDate) - new Date(form.startDate)) /
+        (1000 * 60 * 60 * 24)
+    ) + 1;
+
+    // --- Client‑side validation: ensure requested days <= remaining balance ---
+    // Ensure leaveBalance is an array before using find
+    // if (Array.isArray(leaveBalance) && leaveBalance.length > 0) {
+    //   const balanceEntry = leaveBalance.find((b) => b.type === form.leaveType);
+    //   if (balanceEntry) {
+    //     const remaining = balanceEntry.total - balanceEntry.used;
+    //     if (totalDays > remaining) {
+    //       return Swal.fire({
+    //         icon: "warning",
+    //         title: "Insufficient balance",
+    //         text: `You only have ${remaining} day(s) left for ${form.leaveType}`,
+    //       });
+    //     }
+    //   }
+    // }
+
     try {
       if (isEdit) {
         await axios.put(
           `http://127.0.0.1:5000/api/leave/${id}`,
-          form,
+          { ...form, totalDays },
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
         Swal.fire({
           icon: "success",
           title: "Success",
-          text: "Leave updated successfully",
+          text: isEdit ? "Leave updated successfully" : "Leave applied successfully",
           timer: 2000,
           showConfirmButton: false,
         });
+        console.log('Leave request sent successfully');
       } else {
         await axios.post(
           "http://127.0.0.1:5000/api/leave/apply",
-          form,
+          { ...form, totalDays },
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
@@ -122,7 +190,7 @@ const ApplyLeave = () => {
       }
 
       setTimeout(() => {
-        navigate("/my-leaves");
+        navigate("/employee-dashboard/my-leaves");
       }, 2000);
     } catch (error) {
       console.log(error);
@@ -130,22 +198,27 @@ const ApplyLeave = () => {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text:
-          error.response?.data?.message ||
-          "Something went wrong",
+        text: error.response?.data?.message || "Something went wrong",
       });
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#f4f5f7] p-6">
+    <div className="min-h-screen bg-[#f4f5f7] ">
       {/* Heading */}
-   <div className="mb-8 flex items-center justify-between bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-  
-  {/* LEFT CONTENT */}
-  <div>
-    <h1 className="text-3xl font-bold text-gray-800 tracking-tight">
-      Leave Management
+     <div className="mb-8 flex items-center justify-between bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+      <button
+        onClick={() => navigate(-1)}
+        className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition"
+      >
+        <FaArrowLeft className="text-xl" />
+        {/* <span>Back</span> */}
+      </button>
+
+      {/* LEFT CONTENT */}
+      <div>
+    <h1 className="text-2xl font-bold text-gray-800 tracking-tight">
+      Add Leave
     </h1>
 
     <p className="text-gray-500 mt-2 text-sm">
@@ -171,49 +244,28 @@ const ApplyLeave = () => {
 
           <div className="space-y-4">
 
-            <div className="flex items-center gap-4 bg-blue-50 p-3 rounded-xl">
-              <div className="bg-blue-100 p-3 rounded-lg text-blue-500">
-                <FaUmbrellaBeach />
-              </div>
-
-              <div>
-                <p className="font-medium text-gray-700">Casual Leave</p>
-                <p className="text-sm text-blue-500">8 / 12 Days</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4 bg-green-50 p-3 rounded-xl">
-              <div className="bg-green-100 p-3 rounded-lg text-green-500">
-                <FaMedkit />
-              </div>
-
-              <div>
-                <p className="font-medium text-gray-700">Sick Leave</p>
-                <p className="text-sm text-green-500">6 / 10 Days</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4 bg-purple-50 p-3 rounded-xl">
-              <div className="bg-purple-100 p-3 rounded-lg text-purple-500">
-                <FaGift />
-              </div>
-
-              <div>
-                <p className="font-medium text-gray-700">Privilege Leave</p>
-                <p className="text-sm text-purple-500">10 / 15 Days</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4 bg-orange-50 p-3 rounded-xl">
-              <div className="bg-orange-100 p-3 rounded-lg text-orange-500">
-                <FaClock />
-              </div>
-
-              <div>
-                <p className="font-medium text-gray-700">Compensatory Off</p>
-                <p className="text-sm text-orange-500">2 / 5 Days</p>
-              </div>
-            </div>
+          {/* Leave Balance - Dynamic */}
+          <div className="space-y-4">
+            {Array.isArray(leaveBalance) && leaveBalance.length > 0 ? (
+              leaveBalance.map((item, idx) => (
+                <div key={idx} className="flex items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
+                  <div className={`bg-${item.color || 'blue'}-100 p-3 rounded-lg text-${item.color || 'blue'}-500`}>
+                    {/* icon placeholder */}
+                    {item.type === 'Casual Leave' && <FaUmbrellaBeach />}
+                    {item.type === 'Sick Leave' && <FaMedkit />}
+                    {item.type === 'Privilege Leave' && <FaGift />}
+                    {!['Casual Leave', 'Sick Leave', 'Privilege Leave'].includes(item.type) && <FaClock />}
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-700">{item.type}</p>
+                    <p className="text-sm text-gray-500">{item.used || 0} / {item.total || 0} Days</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-gray-500">No leave balance available</p>
+            )}
+          </div>
 
             {/* Note */}
             <div className="bg-red-50 p-4 rounded-xl mt-6">

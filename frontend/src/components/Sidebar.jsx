@@ -10,6 +10,7 @@ import {
   FaCog,
   FaSignOutAlt,
   FaChartBar,
+  FaPaperPlane,
 } from "react-icons/fa";
 
 import { NavLink, useNavigate } from "react-router-dom";
@@ -39,8 +40,8 @@ const Sidebar = () => {
       path: "/employee-dashboard/attendance-dashboard",
     },
     {
-      name: "My Leaves",
-      icon: <FaClipboardList />,
+      name: " Leaves ",
+      icon: <FaPaperPlane />, // using imported icon or you can import appropriate
       path: "/employee-dashboard/my-leaves",
     },
     {

@@ -41,42 +41,8 @@ export const applyLeave = async (req, res) => {
       });
     }
 
-    // ✅ CHECK LEAVE TYPE
-
-    const leave = balance[leaveType];
-
-    if (!leave) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid leave type",
-      });
-    }
-
-    // ✅ REMAINING LEAVES
-
-    const remaining =
-      leave.total - leave.used;
-
-    // ✅ NO LEAVE LEFT
-
-    if (remaining <= 0) {
-      return res.status(400).json({
-        success: false,
-        message: `No ${leaveType} remaining`,
-      });
-    }
-
-    // ✅ USER TRYING EXTRA LEAVE
-
-    if (totalDays > remaining) {
-      return res.status(400).json({
-        success: false,
-        message: `Only ${remaining} leave(s) remaining`,
-      });
-    }
-
-    // ✅ CREATE LEAVE
-
+    // ✅ Skipping leave balance validation as requested
+    // Directly create the leave without checking remaining balance
     const newLeave = await Leave.create({
       user: req.user._id,
       leaveType,
@@ -86,6 +52,7 @@ export const applyLeave = async (req, res) => {
       reason,
       status: "pending",
     });
+
     // Notify admin of leave application
     await sendAdminNotification('Leave Applied', req.user);
 
@@ -94,6 +61,7 @@ export const applyLeave = async (req, res) => {
       message: "Leave applied successfully",
       leave: newLeave,
     });
+    return;
 
   } catch (error) {
     res.status(500).json({
@@ -253,79 +221,29 @@ export const deleteLeave = async (req, res) => {
   }
 };
 
-export const approveLeave = async (req, res) => {
-  try {
-
-    const leave = await Leave.findById(
-      req.params.id
-    );
-
-    if (!leave) {
-      return res.status(404).json({
-        success: false,
-        message: "Leave not found",
-      });
-    }
-
-    // ✅ ALREADY APPROVED
-
-    if (leave.status === "approved") {
-      return res.status(400).json({
-        success: false,
-        message: "Leave already approved",
-      });
-    }
-
-    // ✅ FIND BALANCE
-
-    const balance =
-      await LeaveBalance.findOne({
-        user: leave.user,
-      });
-
-    // ✅ CURRENT LEAVE TYPE
-
-    const leaveData =
-      balance[leave.leaveType];
-
-    // ✅ REMAINING
-
-    const remaining =
-      leaveData.total - leaveData.used;
-
-    // ✅ CHECK AGAIN
-
-    if (leave.totalDays > remaining) {
-      return res.status(400).json({
-        success: false,
-        message: "Insufficient leave balance",
-      });
-    }
-
-    // ✅ UPDATE USED
-
-    leaveData.used += leave.totalDays;
-
-    await balance.save();
-
-    // ✅ UPDATE STATUS
-
-    leave.status = "approved";
-
-    await leave.save();
-
-    res.json({
-      success: true,
-      message: "Leave approved successfully",
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};  
+  export const approveLeave = async (req, res) => {
+   try {
+ 
+     const leave = await Leave.findById(req.params.id);
+ 
+     if (!leave) {
+       return res.status(404).json({ success: false, message: "Leave not found" });
+     }
+ 
+     // ✅ Already approved?
+     if (leave.status === "approved") {
+       return res.status(400).json({ success: false, message: "Leave already approved" });
+     }
+ 
+      // ✅ Approve leave without balance checks
+      leave.status = "approved";
+      await leave.save();
+      return res.json({ success: true, message: "Leave approved successfully" });
+ 
+   } catch (error) {
+     res.status(500).json({ success: false, message: error.message });
+   }
+ };  
 
 // ✅ REJECT LEAVE
 
@@ -391,45 +309,61 @@ export const getLeaveBalance = async (req, res) => {
 // ✅ GET ALL LEAVES FOR ADMIN (Paginated & Searchable)
 export const getAdminLeaves = async (req, res) => {
   try {
-    const { page = 1, limit = 10, search = "", status = "" } = req.query;
+    const { page = 1, limit = 10, search = "", status = "", employeeId = "" } = req.query;
 
-    const query = {};
-    if (status) {
-      query.status = status.toLowerCase();
-    }
+  const query = {};
+  if (status) {
+    query.status = status.toLowerCase();
+  }
+  if (employeeId) {
+    // We'll filter by employeeId after population
+    // No direct field in Leave, so keep query empty for now
+  }
 
-    const leaves = await Leave.find(query)
-      .populate({
-        path: "user",
-        select: "name email employeeId department position designation profileImage isActive",
-        match: { isActive: true },
-      })
-      .sort({ createdAt: -1 });
+  const leaves = await Leave.find(query)
+    .populate({
+      path: "user",
+      select: "name email employeeId department position designation profileImage status",
+      match: { status: "active" },
+    })
+    .sort({ createdAt: -1 });
 
-    const filteredLeaves = leaves.filter((l) => {
-      if (!l.user) return false;
-      if (search) {
-        const term = search.toLowerCase();
-        return (
-          l.user.name?.toLowerCase().includes(term) ||
-          l.user.email?.toLowerCase().includes(term) ||
-          l.user.employeeId?.toLowerCase().includes(term)
-        );
+  console.log('Total leaves fetched:', leaves.length);
+
+  const filteredLeaves = leaves.filter((l) => {
+    if (!l.user) return false;
+    // Filter by employeeId or userId if provided (exact match, case‑insensitive)
+    if (employeeId) {
+      const empIdStr = (l.user.employeeId || "").toString().toLowerCase();
+      const userIdStr = (l.user._id || "").toString().toLowerCase();
+      const filterId = employeeId.toString().toLowerCase();
+      if (empIdStr !== filterId && userIdStr !== filterId) {
+        return false;
       }
-      return true;
-    });
+    }
+    if (search) {
+      const term = search.toLowerCase();
+      return (
+        l.user.name?.toLowerCase().includes(term) ||
+        l.user.email?.toLowerCase().includes(term) ||
+        (l.user.employeeId || "").toString().toLowerCase().includes(term)
+      );
+    }
+    return true;
+  });
+  console.log('Filtered leaves count:', filteredLeaves.length);
 
-    const totalRecords = filteredLeaves.length;
-    const totalPages = Math.ceil(totalRecords / parseInt(limit)) || 1;
-    const paginatedLeaves = filteredLeaves.slice((parseInt(page) - 1) * parseInt(limit), parseInt(page) * parseInt(limit));
+  const totalRecords = filteredLeaves.length;
+  const totalPages = Math.ceil(totalRecords / parseInt(limit)) || 1;
+  const paginatedLeaves = filteredLeaves.slice((parseInt(page) - 1) * parseInt(limit), parseInt(page) * parseInt(limit));
 
-    res.status(200).json({
-      success: true,
-      leaves: paginatedLeaves,
-      currentPage: parseInt(page),
-      totalPages,
-      totalRecords,
-    });
+  res.status(200).json({
+    success: true,
+    leaves: paginatedLeaves,
+    currentPage: parseInt(page),
+    totalPages,
+    totalRecords,
+  });
   } catch (error) {
     console.error("Error in getAdminLeaves:", error);
     res.status(500).json({

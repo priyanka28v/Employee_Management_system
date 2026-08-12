@@ -160,3 +160,54 @@ export const markLogout = async (req, res) => {
     });
   }
 };
+
+// GET ATTENDANCE BY EMPLOYEE ID (Admin view)
+export const getAttendanceByEmployeeId = async (req, res) => {
+  try {
+    const { id } = req.params; // employee ObjectId
+    const { month = "", page = 1, limit = 15 } = req.query;
+    const query = { employeeId: id };
+    if (month) {
+      query.date = { $regex: `^${month}` };
+    }
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const totalRecords = await Attendance.countDocuments(query);
+    const totalPages = Math.ceil(totalRecords / parseInt(limit)) || 1;
+
+    const attendance = await Attendance.find(query)
+      .sort({ date: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    // Stats across all records for this employee (ignoring pagination)
+    const allUserAttendance = await Attendance.find(query);
+    const totalWorkingDays = allUserAttendance.length;
+    const presentDays = allUserAttendance.filter((a) => a.status === "Present").length;
+    const lateDays = allUserAttendance.filter((a) => a.status === "Late").length;
+    const absentDays = allUserAttendance.filter((a) => a.status === "Absent").length;
+    const attendancePercentage = totalWorkingDays > 0
+      ? Math.round(((presentDays + lateDays) / totalWorkingDays) * 100)
+      : 100;
+
+    res.status(200).json({
+      success: true,
+      attendance,
+      stats: {
+        totalWorkingDays,
+        presentDays,
+        lateDays,
+        absentDays,
+        attendancePercentage,
+      },
+      currentPage: parseInt(page),
+      totalPages,
+      totalRecords,
+    });
+  } catch (error) {
+    console.error("Error in getAttendanceByEmployeeId:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message || "Failed to fetch attendance for employee",
+    });
+  }
+};

@@ -2,7 +2,7 @@ import React from "react";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import { FaUserTie, FaBuilding, FaClock, FaRegCalendarAlt, FaMoneyBillWave, FaKey, FaChartBar, FaDatabase, FaRobot, FaCheckCircle, FaArrowRight } from "react-icons/fa";
-import HomeNavbar from "../components/HomeNavbar";
+import Header from "../components/Header";
 
 const Features = () => {
   const sections = [
@@ -69,7 +69,7 @@ const Features = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-pink-50 via-white to-pink-100 text-gray-800">
-      <HomeNavbar />
+      <Header />
       {/* Hero */}
       <section className="py-16 px-6 md:px-12 lg:px-24 text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold text-pink-600 mb-4">

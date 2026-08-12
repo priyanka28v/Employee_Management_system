@@ -3,12 +3,12 @@ import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 
-import HomeNavbar from "../components/HomeNavbar";
+import Header from "../components/Header";
 
 const About = () => {
   const { user } = useAuth();
     return (<div className="min-h-screen flex flex-col bg-gradient-to-br from-pink-50 via-white to-pink-100 text-gray-800">
-      <HomeNavbar />
+      <Header />
       {/* Hero Section */}
       <section className="flex flex-col md:flex-row items-center justify-center py-12 px-6 md:px-12 lg:px-24">
         <div className="md:w-1/2 space-y-6">

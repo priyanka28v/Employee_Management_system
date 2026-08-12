@@ -5,11 +5,11 @@ import { FaUserTie, FaBuilding, FaClock, FaRegCalendarAlt, FaMoneyBillWave, FaCh
 
 const Home = () => {
   return (
-    <div className="font-inter min-h-screen flex flex-col text-gray-800 bg-white">
+    <div className="font-inter min-h-screen flex flex-col text-gray-800 bg-[#f6f3f4]">
       <HomeNavbar />
 
       {/* Hero */}
-      <section className="bg-gradient-to-r from-blue-50 to-indigo-50 py-20 px-6 md:px-12 lg:px-24 flex flex-col md:flex-row items-center">
+      <section className="bg-[#fdf5f6] py-20 px-6 md:px-12 lg:px-24 flex flex-col md:flex-row items-center">
         <div className="md:w-1/2 space-y-6">
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800">
             Manage Your Employees Smarter
@@ -32,7 +32,7 @@ const Home = () => {
       </section>
 
       {/* Quick Stats */}
-      <section className="py-12 bg-white">
+      <section className="py-12 bg-[#fdf5f6]">
         <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div className="flex flex-col items-center">
             <FaUserTie className="text-5xl text-cyan-600 mb-2" />
@@ -54,7 +54,7 @@ const Home = () => {
       </section>
 
       {/* About EMS Preview */}
-      <section className="py-16 bg-gray-50 px-6 md:px-12 lg:px-24 flex flex-col md:flex-row items-center">
+      <section className="py-16 bg-[#fdf5f6] px-6 md:px-12 lg:px-24 flex flex-col md:flex-row items-center">
         <div className="md:w-1/2 space-y-6">
           <h2 className="text-3xl font-semibold text-gray-800">About WorkSphere EMS</h2>
           <p className="text-lg text-gray-600">
@@ -215,14 +215,14 @@ const Home = () => {
       </section>
 
       {/* Final CTA */}
-      <section className="py-20 bg-gradient-to-r from-blue-50 to-indigo-50 text-center px-6 md:px-12 lg:px-24">
+      <section className="py-20 bg-[#fdf5f6] text-center px-6 md:px-12 lg:px-24">
         <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">Ready to Simplify Employee Management?</h2>
         <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-6">Manage your employee activities efficiently with a centralized and easy‑to‑use EMS platform.</p>
         <Link to="/login" className="inline-block px-8 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">Get Started</Link>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-200 py-10 px-6 md:px-12 lg:px-24">
+      <footer className="bg-[#fdf5f6] text-gray-800 py-10 px-6 md:px-12 lg:px-24">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-xl font-bold mb-2">WorkSphere EMS</h3>

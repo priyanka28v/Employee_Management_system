@@ -71,7 +71,7 @@ const EmployeeLeaves = () => {
 
         <div>
           <h1 className="text-4xl font-bold text-gray-800">
-            My Leaves
+            All Leaves
           </h1>
 
           <p className="text-gray-500 mt-2">
@@ -82,13 +82,13 @@ const EmployeeLeaves = () => {
         <div className="flex gap-3">
 
           {/* BACK */}
-          <button
+          {/* <button
             onClick={() => navigate("/employee-dashboard")}
             className="flex items-center gap-2 bg-gray-700 hover:bg-gray-800 text-white px-5 py-3 rounded-xl transition shadow"
           >
             <FaArrowLeft />
             Back
-          </button>
+          </button> */}
 
           {/* ADD LEAVE */}
           <button

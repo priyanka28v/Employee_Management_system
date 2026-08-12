@@ -3,11 +3,19 @@ import axios from "axios";
 
 const Attendance = () => {
   const [attendance, setAttendance] = useState([]);
+  const [statusFilter, setStatusFilter] = useState("");
+
+  const filteredAttendance = statusFilter
+    ? attendance.filter((item) => item.status === statusFilter)
+    : attendance;
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchAttendance();
   }, []);
+
+  const [error, setError] = useState(null);
 
   // FETCH ATTENDANCE
   const fetchAttendance = async () => {
@@ -15,23 +23,27 @@ const Attendance = () => {
       const user = JSON.parse(localStorage.getItem("user"));
 
       if (!user) {
-        console.log("User not found");
+        setError("User not found in local storage.");
+        return;
+      }
+
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("Authentication token missing. Please log in again.");
         return;
       }
 
       const employeeId = user._id;
 
-      console.log("EMPLOYEE ID:", employeeId);
-
       const res = await axios.get(
-        `http://localhost:5000/api/attendance/employee/${employeeId}`
+        `http://localhost:5000/api/attendance/employee/${employeeId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      console.log("ATTENDANCE DATA:", res.data);
-
       setAttendance(res.data.attendance || []);
-    } catch (error) {
-      console.log("FETCH ERROR:", error);
+    } catch (err) {
+      console.log("FETCH ERROR:", err);
+      setError(err.response?.data?.error || "Failed to fetch attendance.");
     } finally {
       setLoading(false);
     }
@@ -46,6 +58,21 @@ const Attendance = () => {
           Attendance Dashboard
         </h1>
       </div>
+      {/* STATUS FILTER */}
+      <div className="mb-4 flex items-center space-x-2">
+        <label className="text-gray-600">Filter by Status:</label>
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="p-2 border rounded"
+        >
+          <option value="">All</option>
+          <option value="Present">Present</option>
+          <option value="Late">Late</option>
+          <option value="Absent">Absent</option>
+        </select>
+      </div>
+      <div className="mb-4 text-gray-600">Total Attendance Records: {filteredAttendance.length}</div>
 
       {/* TABLE */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
@@ -67,8 +94,8 @@ const Attendance = () => {
                   Loading...
                 </td>
               </tr>
-            ) : attendance.length > 0 ? (
-              attendance.map((item) => (
+            ) : filteredAttendance.length > 0 ? (
+              filteredAttendance.map((item) => (
                 <tr key={item._id} className="border-b hover:bg-gray-50">
                   <td className="p-4">
                     {item.date}
