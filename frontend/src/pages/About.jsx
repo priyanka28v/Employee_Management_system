@@ -12,30 +12,30 @@ const About = () => {
       {/* Hero Section */}
       <section className="flex flex-col md:flex-row items-center justify-center py-12 px-6 md:px-12 lg:px-24">
         <div className="md:w-1/2 space-y-6">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800">About Our Employee Management System</h1>
-          <p className="text-lg md:text-xl text-gray-600">
-            EMS helps organizations manage employees and daily HR activities efficiently, providing a centralized platform for all employee‑related workflows.
+          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800">About Our WorkSphere</h1>
+          <p className="text-lg md:text-xl text-gray-800">
+            WorkSphere helps organizations Manage your employee activities efficiently with a centralized and easy‑to‑use WorkSphere platform.
           </p>
         </div>
         <div className="md:w-1/2 mt-8 md:mt-0 flex justify-center">
           {/* Image generated via AI – place the file in public/assets */}
           <img
             src="/assets/about_illustration.jpg"
-            alt="Employee Management Illustration"
+            alt="About WorkSphere illustration"
             className="w-full max-w-md rounded-xl shadow-xl transition-transform transform hover:scale-105"
           />
         </div>
       </section>
 
-      {/* About EMS */}
+      {/* About WorkSphere Preview */}
       <section className="bg-[#fdf5f6] backdrop-blur-lg rounded-2xl border border-pink-200 shadow-md mx-6 md:mx-12 lg:mx-24 p-8 mb-8">
-        <h2 className="text-3xl font-semibold text-gray-800 mb-4">About EMS</h2>
+        <h2 className="text-3xl font-semibold text-gray-800">About WorkSphere</h2>
         <p className="text-gray-800 leading-relaxed mb-4">
-          WorkSphere is a modern, premium employee management system designed to streamline HR workflows, boost productivity, and provide insightful analytics. It offers a centralized platform for managing employee information, attendance, leaves, salary, departments, and other employee‑related activities.
+          An efficient WorkSphere designed to simplify employee records, attendance, leaves, departments and salary management in one centralized platform.
         </p>
       </section>
 
-      {/* Key Features */}
+      {/* KeyWorkSphere Features */}
       <section className="mx-6 md:mx-12 lg:mx-24 mb-12">
         <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">What We Provide</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -51,16 +51,16 @@ const About = () => {
               key={item.title}
               className="bg-[#fdf5f6]/10 backdrop-blur-md rounded-xl p-6 shadow-lg hover:shadow-2xl transition-shadow"
             >
-              <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
-              <p className="text-gray-300 text-sm">{item.desc}</p>
+              <h3 className="text-xl font-bold mb-2">WorkSphere {item.title}</h3>
+              <p className="text-gray-800 text-sm">{item.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Why Choose EMS */}
+      {/* Why Choose WorkSphere */}
       <section className="bg-[#fdf5f6]/10 backdrop-blur-lg rounded-2xl border border-pink-200 shadow-md mx-6 md:mx-12 lg:mx-24 p-8 mb-12">
-        <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center">Why Choose EMS</h2>
+        <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center">Why Choose WorkSphere</h2>
         <ul className="list-disc list-inside space-y-2 text-gray-800 max-w-2xl mx-auto">
           <li>Easy to use interface with minimal learning curve.</li>
           <li>All employee data centralized in one secure location.</li>
@@ -82,7 +82,7 @@ const About = () => {
             <div key={item.step} className="flex-1 bg-[#fdf5f6]/10 backdrop-blur-md rounded-xl p-6 text-center">
               <div className="text-4xl font-bold text-gray-800 mb-2">{item.step}</div>
               <h3 className="text-xl font-semibold text-gray-600 mb-2">{item.title}</h3>
-              <p className="text-gray-300 text-sm">{item.desc}</p>
+              <p className="text-gray-800 text-sm">{item.desc}</p>
             </div>
           ))}
         </div>

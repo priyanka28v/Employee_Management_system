@@ -7,22 +7,19 @@ const HomeNavbar = () => {
   const { user } = useAuth();
 
   return (
-    <nav className="bg-[#f6f3f4] backdrop-blur-xl border-b border-gray-200 shadow-lg sticky top-0 z-30 px-6 py-3 md:px-8 flex items-center justify-between text-gray-800">
+    <nav className="bg-[#071028] backdrop-blur-xl border-b border-gray-200 shadow-lg sticky top-0 z-30 px-6   flex items-center justify-between text-gray-800">
       {/* LOGO SECTION */}
-      <div className="flex items-center gap-3 cursor-pointer flex-shrink-0" onClick={() => window.location.href = '/' }>
-        <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 via-red-500 to-orange-400 flex items-center justify-center shadow-xl">
-          <div className="w-6 h-6 border-2 border-white rounded-md rotate-12"></div>
-          <div className="absolute inset-0 rounded-2xl bg-white/15 blur-md"></div>
-        </div>
-        <h1 className="text-2xl font-bold tracking-wide text-gray-800">WorkSphere</h1>
-      </div>
+      <div className="p-3 border-b border-gray-700">
+  <h1 className="text-3xl font-bold text-pink-500">WorkSphere</h1>
+  <p className="text-sm text-gray-400 mt-1">Employee Management</p>
+</div>
 
       {/* NAV LINKS */}
       <div className="flex items-center space-x-4 md:space-x-6 flex-shrink-0">
         {/* <Link to="/" className="text-cyan-100 hover:text-cyan-200 transition-colors">Home</Link> */}
-        <Link to="/about" className="text-gray-800 hover:text-gray-900 transition-colors">About</Link>
-        <Link to="/features" className="text-gray-800 hover:text-gray-900 transition-colors">Features</Link>
-        <Link to="/contact" className="text-gray-800 hover:text-gray-900 transition-colors">Contact</Link>
+        <Link to="/about" className="text-white hover:text-pink-500 hover:font-bold transition-colors">About</Link>
+        <Link to="/features" className="text-white hover:text-pink-500 hover:font-bold  transition-colors">Features</Link>
+        <Link to="/contact" className="text-white hover:text-pink-500 hover:font-bold  transition-colors">Contact</Link>
         {user ? (
           // Notification icon for logged‑in users
           <div className="flex items-center gap-3 flex-shrink-0">
