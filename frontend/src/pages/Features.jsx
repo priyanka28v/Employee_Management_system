@@ -7,7 +7,7 @@ import HomeNavbar from "../components/HomeNavbar";
 const Features = () => {
   const sections = [
     {
-      icon: <FaUserTie className="text-5xl text-cyan-300" />, // Employee Management
+      icon: <FaUserTie className="text-5xl text-pink-600 mr-4" />, // Employee Management
       title: "Employee Management",
       points: [
         "Add, view and edit employee information",
@@ -16,7 +16,7 @@ const Features = () => {
       ],
     },
     {
-      icon: <FaBuilding className="text-5xl text-cyan-300" />, // Department Management
+      icon: <FaBuilding className="text-5xl text-pink-600 mr-4" />, // Department Management
       title: "Department Management",
       points: [
         "Create and manage departments",
@@ -26,7 +26,7 @@ const Features = () => {
       ],
     },
     {
-      icon: <FaClock className="text-5xl text-cyan-300" />, // Attendance Management
+      icon: <FaClock className="text-5xl text-pink-600 mr-4" />, // Attendance Management
       title: "Attendance Management",
       points: [
         "Automatic attendance when employee logs in",
@@ -37,7 +37,7 @@ const Features = () => {
       ],
     },
     {
-      icon: <FaRegCalendarAlt className="text-5xl text-cyan-300" />, // Leave Management
+      icon: <FaRegCalendarAlt className="text-5xl text-pink-600 mr-4" />, // Leave Management
       title: "Leave Management",
       points: [
         "Employees can apply for leave",
@@ -47,7 +47,7 @@ const Features = () => {
       ],
     },
     {
-      icon: <FaMoneyBillWave className="text-5xl text-cyan-300" />, // Salary Management
+      icon: <FaMoneyBillWave className="text-5xl text-pink-600 mr-4" />, // Salary Management
       title: "Salary Management",
       points: [
         "Admin manages employee salary details",
@@ -56,7 +56,7 @@ const Features = () => {
       ],
     },
     {
-      icon: <FaKey className="text-5xl text-cyan-300" />, // Role‑Based Access
+      icon: <FaKey className="text-5xl text-pink-600 mr-4" />, // Role‑Based Access
       title: "Role‑Based Access",
       points: [
         "Separate Admin and Employee access",
@@ -68,32 +68,32 @@ const Features = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-800 via-gray-900 to-black text-white">
+    <div className="min-h-screen flex flex-col bg-[#f6f3f4] text-gray-800">
       <HomeNavbar />
       {/* Hero */}
       <section className="py-16 px-6 md:px-12 lg:px-24 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-cyan-300 mb-4">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-pink-600 mb-4">
           EMS Features
         </h1>
-        <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto">
+        <p className="text-lg md:text-xl text-gray-800 max-w-2xl mx-auto">
           Explore the powerful modules that make WorkSphere the complete solution for modern HR and employee management.
         </p>
       </section>
 
       {/* Feature Sections */}
-      <section className="flex-1 mx-6 md:mx-12 lg:mx-24 space-y-12 mb-12">
+      <section className="flex-1 max-w-7xl mx-auto space-y-12 mb-12">
         {sections.map((sec, idx) => (
           <div
             key={idx}
-            className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 hover:shadow-xl transition-shadow"
+            className="bg-[#fdf5f6]/10 backdrop-blur-lg rounded-2xl p-8 hover:shadow-xl transition-shadow border border-pink-200"
           >
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
               <div className="flex-shrink-0">{sec.icon}</div>
               <div>
-                <h2 className="text-2xl font-semibold text-cyan-300 mb-3">
+                <h2 className="text-2xl font-semibold text-gray-800 mb-3">
                   {sec.title}
                 </h2>
-                <ul className="list-disc list-inside space-y-1 text-gray-200">
+                <ul className="list-disc list-inside space-y-1 text-gray-800">
                   {sec.points.map((pt, i) => (
                     <li key={i}>{pt}</li>
                   ))}
@@ -105,13 +105,13 @@ const Features = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="py-12 bg-white/5 backdrop-blur-md text-center rounded-2xl mx-6 md:mx-12 lg:mx-24 mb-12">
-        <h2 className="text-3xl font-semibold text-cyan-300 mb-4">
+      <section className="py-12 bg-[#fdf5f6]/5 backdrop-blur-md text-center rounded-2xl mx-6 md:mx-12 lg:mx-24 mb-12">
+        <h2 className="text-3xl font-semibold text-gray-800 mb-4">
           Ready to experience the full power of WorkSphere?
         </h2>
         <Link
           to="/login"
-          className="inline-block mt-4 px-8 py-3 bg-cyan-600 hover:bg-cyan-700 rounded-md text-white font-medium transition-colors"
+          className="inline-block mt-4 px-8 py-3 bg-pink-500 hover:bg-pink-600 rounded-md text-white font-medium transition-colors shadow-md hover:shadow-lg"
         >
           Get Started / Login
         </Link>

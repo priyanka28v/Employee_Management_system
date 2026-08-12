@@ -52,7 +52,7 @@ const Login = () => {
   };
 
   return (
-   <div className="min-h-screen bg-[#f6f3f4] w-full flex flex-col px-0 pt-0 pb-10">
+   <div className="min-h-[70vh] bg-[#f6f3f4] w-full flex flex-col px-0 pt-0 pb-10">
   <HomeNavbar />
   <div className="w-full bg-white shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2 rounded-none md:rounded-3xl">
 
