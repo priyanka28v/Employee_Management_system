@@ -14,7 +14,7 @@ const EmployeeLayout = () => {
 
       {/* MAIN CONTENT */}
       <div className="flex flex-col flex-1">
-        <Header />
+        {/* <Header /> */}
         <div className="flex-1 p-6">
           <Outlet />
         </div>

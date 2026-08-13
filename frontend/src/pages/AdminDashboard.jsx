@@ -16,7 +16,7 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <div className="flex-1 ml-72 flex flex-col">
         {/* Navbar */}
-        <Header />
+        {/* <Header /> */}
 
         {/* Page Content */}
         <main className="flex-1 px-8 py-6">
