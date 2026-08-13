@@ -2,7 +2,7 @@ import React from "react";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import { FaUserTie, FaBuilding, FaClock, FaRegCalendarAlt, FaMoneyBillWave, FaKey, FaChartBar, FaDatabase, FaRobot, FaCheckCircle, FaArrowRight } from "react-icons/fa";
-import Header from "../components/Header";
+// import Header from "../components/Header";
 import HomeNavbar from "../components/HomeNavbar";
 import { useAuth } from "../context/authContext";
 

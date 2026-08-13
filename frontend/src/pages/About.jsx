@@ -3,7 +3,7 @@ import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 
-import Header from "../components/Header";
+// import Header from "../components/Header";
 import HomeNavbar from "../components/HomeNavbar";
 
 const About = () => {

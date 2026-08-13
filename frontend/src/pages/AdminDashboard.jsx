@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuth } from "../context/authContext";
 import AdminSide from "../components/Dashboard/AdminSide.jsx";
-import Header from "../components/Header.jsx";
+// import Header from "../components/Header.jsx";
 import AdminSummary from "../components/Dashboard/AdminSummary.jsx";
 import { Outlet } from "react-router-dom";
 

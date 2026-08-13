@@ -35,12 +35,12 @@ const HomeNavbar = () => {
         >
           Features
         </Link>
-        <Link
+        {/* <Link
           to="/contact"
           className="text-white hover:text-pink-500 hover:font-bold  transition-colors"
         >
           Contact
-        </Link>
+        </Link> */}
         {user ? (
           // Notification icon for logged‑in users
 
