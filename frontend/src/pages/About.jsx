@@ -25,7 +25,7 @@ const About = () => {
         <div className="md:w-1/2 mt-8 md:mt-0 flex justify-center">
           {/* Image generated via AI – place the file in public/assets */}
           <img
-            src="/assets/about_illustration.jpg"
+            src="/assets/ems.png"
             alt="About WorkSphere illustration"
             className="w-full max-w-md rounded-xl shadow-xl transition-transform transform hover:scale-105"
           />

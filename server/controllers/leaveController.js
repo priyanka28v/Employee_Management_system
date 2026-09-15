@@ -1,5 +1,6 @@
 import { Leave, LeaveBalance } from "../models/Leave.js";
-import { sendAdminNotification } from "../utils/emailService.js";
+import User from "../models/User.js";
+import { sendAdminNotification, sendLeaveApplicationNotification, sendLeaveStatusNotification } from "../utils/emailService.js";
 
 // ✅ APPLY LEAVE
 export const applyLeave = async (req, res) => {
@@ -54,7 +55,7 @@ export const applyLeave = async (req, res) => {
     });
 
     // Notify admin of leave application
-    await sendAdminNotification('Leave Applied', req.user);
+    await sendLeaveApplicationNotification(req.user, newLeave);
 
     res.status(201).json({
       success: true,
@@ -221,38 +222,39 @@ export const deleteLeave = async (req, res) => {
   }
 };
 
-  export const approveLeave = async (req, res) => {
-   try {
- 
-     const leave = await Leave.findById(req.params.id);
- 
-     if (!leave) {
-       return res.status(404).json({ success: false, message: "Leave not found" });
-     }
- 
-     // ✅ Already approved?
-     if (leave.status === "approved") {
-       return res.status(400).json({ success: false, message: "Leave already approved" });
-     }
- 
-      // ✅ Approve leave without balance checks
-      leave.status = "approved";
-      await leave.save();
-      return res.json({ success: true, message: "Leave approved successfully" });
- 
-   } catch (error) {
-     res.status(500).json({ success: false, message: error.message });
-   }
- };  
+export const approveLeave = async (req, res) => {
+  try {
+    const leave = await Leave.findById(req.params.id);
+
+    if (!leave) {
+      return res.status(404).json({ success: false, message: "Leave not found" });
+    }
+
+    // ✅ Already approved?
+    if (leave.status === "approved") {
+      return res.status(400).json({ success: false, message: "Leave already approved" });
+    }
+
+    // ✅ Approve leave without balance checks
+    leave.status = "approved";
+    await leave.save();
+
+    // Notify employee via email and in-app notification
+    const employee = await User.findById(leave.user);
+    if (employee) {
+      await sendLeaveStatusNotification(employee, leave, "approved");
+    }
+
+    return res.json({ success: true, message: "Leave approved successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};  
 
 // ✅ REJECT LEAVE
-
 export const rejectLeave = async (req, res) => {
   try {
-
-    const leave = await Leave.findById(
-      req.params.id
-    );
+    const leave = await Leave.findById(req.params.id);
 
     if (!leave) {
       return res.status(404).json({
@@ -262,14 +264,18 @@ export const rejectLeave = async (req, res) => {
     }
 
     leave.status = "rejected";
-
     await leave.save();
+
+    // Notify employee via email and in-app notification
+    const employee = await User.findById(leave.user);
+    if (employee) {
+      await sendLeaveStatusNotification(employee, leave, "rejected");
+    }
 
     res.json({
       success: true,
       message: "Leave rejected successfully",
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,

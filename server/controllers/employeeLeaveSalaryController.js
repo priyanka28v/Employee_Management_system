@@ -1,6 +1,7 @@
 import LeaveBalance from '../models/Leave.js';
 import Salary from '../models/Salary.js';
 import User from '../models/User.js';
+import { sendSalaryNotification } from '../utils/emailService.js';
 
 // Update leave allocation totals for an employee (admin only)
 export const updateLeaveAllocation = async (req, res) => {
@@ -104,6 +105,10 @@ export const upsertSalary = async (req, res) => {
         status: paymentStatus,
       });
     }
+
+    // Notify employee of salary update via email & in-app notification
+    await sendSalaryNotification(employee, salary);
+
     return res.status(200).json({ success: true, salary });
   } catch (error) {
     console.error('Error in upsertSalary:', error);

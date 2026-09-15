@@ -91,7 +91,7 @@ const Login = () => {
 
           {/* Error */}
           {error && (
-            <p className="text-red-500 text-center mb-4">{error}</p>
+            <p className="text-red-600 font-semibold text-center mb-4">{error}</p>
           )}
 
           {/* Form */}
@@ -149,7 +149,7 @@ const Login = () => {
             </div>
 
             {/* Remember + Forgot */}
-            <div className="flex items-center justify-between text-sm">
+            {/* <div className="flex items-center justify-between text-sm">
               <label className="flex items-center gap-2 text-gray-600">
                 <input type="checkbox" className="accent-pink-500" />
                 Remember me
@@ -158,7 +158,7 @@ const Login = () => {
               <p className="text-pink-500 cursor-pointer hover:underline">
                 Forgot Password?
               </p>
-            </div>
+            </div> */}
 
             {/* Login Button */}
             <button
@@ -201,14 +201,14 @@ const Login = () => {
           </p>
 
           {/* Demo Admin Credentials */}
-          <div className="mt-6 bg-pink-50 border border-pink-200 rounded-xl p-4 text-sm">
+          {/* <div className="mt-6 bg-pink-50 border border-pink-200 rounded-xl p-4 text-sm">
             <h3 className="font-semibold text-pink-600 mb-2">
               Admin Login
             </h3>
 
             <p>Email: admin@gmail.com</p>
             <p>Password: admin123</p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

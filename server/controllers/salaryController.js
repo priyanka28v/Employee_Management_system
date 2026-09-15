@@ -1,5 +1,6 @@
 import Salary from "../models/Salary.js";
 import User from "../models/User.js";
+import { sendSalaryNotification } from "../utils/emailService.js";
 
 // ADD OR UPDATE SALARY (Admin)
 export const addSalary = async (req, res) => {
@@ -68,6 +69,9 @@ export const addSalary = async (req, res) => {
         status: paymentStatus,
       });
     }
+
+    // Notify employee of salary update via email & in-app notification
+    await sendSalaryNotification(employee, salaryRecord);
 
     res.status(200).json({
       success: true,

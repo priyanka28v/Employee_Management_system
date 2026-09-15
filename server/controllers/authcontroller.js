@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import Attendance from "../models/Attendance.js";
 import { LeaveBalance } from "../models/Leave.js";
 import Department from "../models/Department.js";
-import { sendAdminNotification } from "../utils/emailService.js";
+import { sendAdminNotification, sendEmployeeLoginNotification } from "../utils/emailService.js";
 
 /* =========================
    AUTO ATTENDANCE FUNCTION
@@ -101,8 +101,12 @@ const login = async (req, res) => {
         expiresIn: "10d",
       }
     );
-    // Notify admin of successful login
-    await sendAdminNotification('Employee Login', user);
+    // Notify admin of employee login
+    if (user.role === 'employee' || user.role !== 'admin') {
+      await sendEmployeeLoginNotification(user);
+    } else {
+      await sendAdminNotification('Admin Login', user);
+    }
 
     return res.status(200).json({
       success: true,

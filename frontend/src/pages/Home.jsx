@@ -27,7 +27,7 @@ const Home = () => {
           </div>
         </div>
         <div className="md:w-1/2 mt-8 md:mt-0 flex justify-center">
-          <img src="/assets/features_illustration.jpg" alt="Employee management dashboard" className="w-full max-w-md rounded-xl shadow-xl transform hover:scale-105 transition-transform" />
+          <img  src="/assets/ems.png" alt="Employee management dashboard" className="w-full max-w-md rounded-xl shadow-xl transform hover:scale-105 transition-transform" />
         </div>
       </section>
 
@@ -64,9 +64,9 @@ const Home = () => {
             Learn More
           </Link>
         </div>
-        <div className="md:w-1/2 mt-8 md:mt-0 flex justify-center">
+        {/* <div className="md:w-1/2 mt-8 md:mt-0 flex justify-center">
           <img src="/assets/about_illustration.jpg" alt="About EMS illustration" className="w-full max-w-md rounded-xl shadow-xl transform hover:scale-105 transition-transform" />
-        </div>
+        </div> */}
       </section>
 
       {/* Core Modules */}
