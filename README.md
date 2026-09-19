@@ -168,7 +168,3 @@ I am extending it with additional features and improvements.
 - Leave Management
 - Admin Analytics
 - UI Enhancements
-=======
-# employee-management-system
-Full-stack MERN employee management system with authentication and admin dashboard.
-
